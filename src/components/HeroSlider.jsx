@@ -6,7 +6,30 @@ export default function HeroSlider({ books, onOpenBook }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
 
-  const featuredBooks = books.slice(0, 3); // Showcase first 3 books
+  const featuredBooks = books.slice(0, 4); // Showcase first 4 books
+
+  const coverMotions = {
+    1: { // Chasing the Neon Horizon: cyber energetic slide-in from right
+      initial: { x: 120, y: -20, scale: 0.8, opacity: 0, rotate: 12 },
+      animate: { x: 0, y: 0, scale: 1, opacity: 1, rotate: 3 },
+      transition: { type: "spring", stiffness: 120, damping: 14 }
+    },
+    2: { // Echoes of the Void: float in slowly from below
+      initial: { y: 80, scale: 0.9, opacity: 0, rotate: -10 },
+      animate: { y: 0, scale: 1, opacity: 1, rotate: -3 },
+      transition: { type: "spring", stiffness: 90, damping: 16 }
+    },
+    3: { // The Architecture of Dreams: spin in organically
+      initial: { scale: 0.6, opacity: 0, rotate: -30 },
+      animate: { scale: 1, opacity: 1, rotate: 4 },
+      transition: { type: "spring", stiffness: 140, damping: 12 }
+    },
+    4: { // Shadows and Silk: elegant drift from left
+      initial: { y: 100, x: -50, scale: 0.85, opacity: 0, rotate: -15 },
+      animate: { y: 0, x: 0, scale: 1, opacity: 1, rotate: -2 },
+      transition: { type: "spring", stiffness: 110, damping: 15 }
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -73,11 +96,11 @@ export default function HeroSlider({ books, onOpenBook }) {
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)",
-          opacity: 0.14,
-          filter: "blur(80px)",
+          background: currentBook.themeColor,
+          opacity: 0.18,
+          filter: "blur(90px)",
           transform: "scale(1.2)",
-          transition: "var(--transition-smooth)",
+          transition: "background 0.8s ease",
           zIndex: 0
         }}
       />
@@ -121,8 +144,8 @@ export default function HeroSlider({ books, onOpenBook }) {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "0.5rem",
-                  background: "rgba(var(--accent-rgb), 0.15)",
-                  color: "var(--accent-primary)",
+                  background: `${currentBook.coverAccent}22`,
+                  color: currentBook.coverAccent,
                   padding: "0.4rem 0.8rem",
                   borderRadius: "20px",
                   fontSize: "0.8rem",
@@ -212,7 +235,10 @@ export default function HeroSlider({ books, onOpenBook }) {
                   className="btn-primary"
                   style={{
                     padding: "0.85rem 2rem",
-                    fontSize: "1rem"
+                    fontSize: "1rem",
+                    background: `linear-gradient(135deg, ${currentBook.coverAccent}, ${currentBook.coverAccent}cc)`,
+                    boxShadow: `0 4px 15px ${currentBook.glowColor || "rgba(0,0,0,0.35)"}`,
+                    border: "none"
                   }}
                 >
                   <BookOpen size={18} />
@@ -223,7 +249,7 @@ export default function HeroSlider({ books, onOpenBook }) {
                     fontSize: "1.6rem",
                     fontWeight: "800",
                     fontFamily: "var(--font-title)",
-                    color: "var(--accent-primary)",
+                    color: currentBook.coverAccent,
                     marginLeft: "1rem"
                   }}
                 >
@@ -238,13 +264,22 @@ export default function HeroSlider({ books, onOpenBook }) {
                 flex: "1 1 350px",
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+                perspective: "1000px"
               }}
             >
               <motion.div
-                initial={{ scale: 0.8, opacity: 0, rotate: -5 }}
-                animate={{ scale: 1, opacity: 1, rotate: 3 }}
-                transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
+                key={currentBook.id}
+                initial={coverMotions[currentBook.id]?.initial || { scale: 0.8, opacity: 0, rotate: -5 }}
+                animate={coverMotions[currentBook.id]?.animate || { scale: 1, opacity: 1, rotate: 3 }}
+                transition={coverMotions[currentBook.id]?.transition || { type: "spring", stiffness: 100, delay: 0.2 }}
+                whileHover={{ 
+                  rotateY: 18, 
+                  rotateX: -12, 
+                  scale: 1.06, 
+                  y: -12,
+                  boxShadow: `0 35px 60px -10px ${currentBook.glowColor || "rgba(0,0,0,0.6)"}`
+                }}
                 className="float-animation"
                 style={{
                   position: "relative",
@@ -261,7 +296,8 @@ export default function HeroSlider({ books, onOpenBook }) {
                   flexDirection: "column",
                   justifyContent: "space-between",
                   padding: "2rem",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  transformStyle: "preserve-3d"
                 }}
                 onClick={() => onOpenBook(currentBook)}
               >
@@ -432,7 +468,7 @@ export default function HeroSlider({ books, onOpenBook }) {
               width: currentIndex === i ? "24px" : "8px",
               height: "8px",
               borderRadius: "4px",
-              backgroundColor: currentIndex === i ? "var(--accent-primary)" : "var(--text-muted)",
+              backgroundColor: currentIndex === i ? currentBook.coverAccent : "var(--text-muted)",
               cursor: "pointer",
               transition: "all 0.3s ease"
             }}

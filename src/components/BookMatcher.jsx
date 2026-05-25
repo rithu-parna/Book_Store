@@ -356,11 +356,19 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
                 borderRadius: "var(--radius-md)",
                 width: "100%",
                 maxWidth: "600px",
-                alignItems: "center"
+                alignItems: "center",
+                perspective: "800px"
               }}
             >
               {/* Cover Art */}
-              <div
+              <motion.div
+                whileHover={{
+                  rotateY: 12,
+                  rotateX: -6,
+                  scale: 1.05,
+                  boxShadow: `0 15px 30px ${matchedBook.glowColor || "rgba(0,0,0,0.4)"}`
+                }}
+                transition={{ type: "spring", stiffness: 150, damping: 15 }}
                 style={{
                   width: "120px",
                   height: "180px",
@@ -376,7 +384,8 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
                   color: "#ffffff",
                   position: "relative",
                   border: "1px solid rgba(255,255,255,0.1)",
-                  flexShrink: 0
+                  flexShrink: 0,
+                  transformStyle: "preserve-3d"
                 }}
               >
                 <div
@@ -399,7 +408,7 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
                     <span style={{ fontSize: "0.6rem" }}>{matchedBook.author}</span>
                   </>
                 )}
-              </div>
+              </motion.div>
 
               {/* Details Column */}
               <div style={{ flex: 1, minWidth: "220px", display: "flex", flexDirection: "column", gap: "0.5rem" }}>

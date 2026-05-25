@@ -17,7 +17,8 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
         height: "100%",
         padding: "1.25rem",
         position: "relative",
-        overflow: "hidden"
+        overflow: "hidden",
+        perspective: "800px"
       }}
     >
       {/* Category Tag Header & Wishlist Button */}
@@ -60,8 +61,15 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
       </div>
 
       {/* Book Cover Container with hover effects */}
-      <div
+      <motion.div
         onClick={onOpen}
+        whileHover={{
+          rotateY: 12,
+          rotateX: -6,
+          scale: 1.03,
+          boxShadow: `0 15px 30px -5px ${book.glowColor || "rgba(0,0,0,0.4)"}`
+        }}
+        transition={{ type: "spring", stiffness: 150, damping: 15 }}
         style={{
           position: "relative",
           width: "100%",
@@ -78,7 +86,8 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
           boxShadow: `0 10px 25px -5px ${book.glowColor || "rgba(0,0,0,0.3)"}`,
           marginBottom: "1.25rem",
           overflow: "hidden",
-          border: "1px solid rgba(255, 255, 255, 0.08)"
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          transformStyle: "preserve-3d"
         }}
       >
         {/* Spine Shadow */}
@@ -186,7 +195,7 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
             Quick View
           </span>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Book Metadata */}
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
