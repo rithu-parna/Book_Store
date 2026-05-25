@@ -365,7 +365,9 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
                   width: "120px",
                   height: "180px",
                   borderRadius: "6px",
-                  background: matchedBook.themeColor,
+                  background: matchedBook.image 
+                    ? `linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%), url(${matchedBook.image}) center/cover no-repeat` 
+                    : matchedBook.themeColor,
                   boxShadow: `0 10px 20px ${matchedBook.glowColor || "rgba(0,0,0,0.3)"}`,
                   padding: "1rem",
                   display: "flex",
@@ -384,14 +386,19 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
                     top: 0,
                     bottom: 0,
                     width: "6px",
-                    background: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.05) 45%, rgba(0,0,0,0.15) 100%)"
+                    background: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.05) 45%, rgba(0,0,0,0.15) 100%)",
+                    zIndex: 3
                   }}
                 />
-                <div>
-                  <div style={{ height: "2px", width: "15px", backgroundColor: matchedBook.coverAccent, marginBottom: "0.25rem" }} />
-                  <span style={{ fontSize: "0.75rem", fontWeight: "bold", display: "block" }}>{matchedBook.title}</span>
-                </div>
-                <span style={{ fontSize: "0.6rem" }}>{matchedBook.author}</span>
+                {!matchedBook.image && (
+                  <>
+                    <div>
+                      <div style={{ height: "2px", width: "15px", backgroundColor: matchedBook.coverAccent, marginBottom: "0.25rem" }} />
+                      <span style={{ fontSize: "0.75rem", fontWeight: "bold", display: "block" }}>{matchedBook.title}</span>
+                    </div>
+                    <span style={{ fontSize: "0.6rem" }}>{matchedBook.author}</span>
+                  </>
+                )}
               </div>
 
               {/* Details Column */}

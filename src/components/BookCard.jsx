@@ -112,42 +112,44 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
           />
         )}
 
-        <div style={{ zIndex: 2 }}>
-          {!book.image && (
-            <div
-              style={{
-                height: "2.5px",
-                width: "25px",
-                backgroundColor: book.coverAccent,
-                marginBottom: "0.5rem"
-              }}
-            />
-          )}
-          <h4
-            className="font-serif"
-            style={{
-              color: "#ffffff",
-              fontSize: "1.1rem",
-              fontWeight: "700",
-              lineHeight: "1.2",
-              textShadow: "0 2px 4px rgba(0,0,0,0.4)"
-            }}
-          >
-            {book.title}
-          </h4>
-        </div>
+        {!book.image && (
+          <>
+            <div style={{ zIndex: 2 }}>
+              <div
+                style={{
+                  height: "2.5px",
+                  width: "25px",
+                  backgroundColor: book.coverAccent,
+                  marginBottom: "0.5rem"
+                }}
+              />
+              <h4
+                className="font-serif"
+                style={{
+                  color: "#ffffff",
+                  fontSize: "1.1rem",
+                  fontWeight: "700",
+                  lineHeight: "1.2",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.4)"
+                }}
+              >
+                {book.title}
+              </h4>
+            </div>
 
-        <p
-          style={{
-            color: "#e2e8f0",
-            fontSize: "0.8rem",
-            fontWeight: "500",
-            zIndex: 2,
-            textShadow: "0 1px 2px rgba(0,0,0,0.4)"
-          }}
-        >
-          {book.author}
-        </p>
+            <p
+              style={{
+                color: "#e2e8f0",
+                fontSize: "0.8rem",
+                fontWeight: "500",
+                zIndex: 2,
+                textShadow: "0 1px 2px rgba(0,0,0,0.4)"
+              }}
+            >
+              {book.author}
+            </p>
+          </>
+        )}
 
         {/* Quick View Button Hover Overlay */}
         <motion.div

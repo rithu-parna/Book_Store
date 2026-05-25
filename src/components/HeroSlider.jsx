@@ -73,11 +73,11 @@ export default function HeroSlider({ books, onOpenBook }) {
         style={{
           position: "absolute",
           inset: 0,
-          background: currentBook.themeColor,
-          opacity: 0.12,
-          filter: "blur(60px)",
+          background: "linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)",
+          opacity: 0.14,
+          filter: "blur(80px)",
           transform: "scale(1.2)",
-          transition: "background 1s ease",
+          transition: "var(--transition-smooth)",
           zIndex: 0
         }}
       />
@@ -297,53 +297,55 @@ export default function HeroSlider({ books, onOpenBook }) {
                   />
                 )}
 
-                <div style={{ zIndex: 2 }}>
-                  {!currentBook.image && (
-                    <div
-                      style={{
-                        height: "3px",
-                        width: "40px",
-                        backgroundColor: currentBook.coverAccent,
-                        marginBottom: "1rem"
-                      }}
-                    />
-                  )}
-                  <h3
-                    className="font-serif"
-                    style={{
-                      color: "#ffffff",
-                      fontSize: "1.4rem",
-                      fontWeight: "700",
-                      lineHeight: "1.2",
-                      textShadow: "0 2px 4px rgba(0,0,0,0.3)"
-                    }}
-                  >
-                    {currentBook.title}
-                  </h3>
-                </div>
+                {!currentBook.image && (
+                  <>
+                    <div style={{ zIndex: 2 }}>
+                      <div
+                        style={{
+                          height: "3px",
+                          width: "40px",
+                          backgroundColor: currentBook.coverAccent,
+                          marginBottom: "1rem"
+                        }}
+                      />
+                      <h3
+                        className="font-serif"
+                        style={{
+                          color: "#ffffff",
+                          fontSize: "1.4rem",
+                          fontWeight: "700",
+                          lineHeight: "1.2",
+                          textShadow: "0 2px 4px rgba(0,0,0,0.3)"
+                        }}
+                      >
+                        {currentBook.title}
+                      </h3>
+                    </div>
 
-                <div style={{ zIndex: 2 }}>
-                  <p
-                    style={{
-                      color: "#94a3b8",
-                      fontSize: "0.85rem",
-                      textTransform: "uppercase",
-                      letterSpacing: "1px"
-                    }}
-                  >
-                    Author
-                  </p>
-                  <p
-                    style={{
-                      color: "#ffffff",
-                      fontSize: "0.95rem",
-                      fontWeight: "600",
-                      textShadow: "0 1px 2px rgba(0,0,0,0.3)"
-                    }}
-                  >
-                    {currentBook.author}
-                  </p>
-                </div>
+                    <div style={{ zIndex: 2 }}>
+                      <p
+                        style={{
+                          color: "#94a3b8",
+                          fontSize: "0.85rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "1px"
+                        }}
+                      >
+                        Author
+                      </p>
+                      <p
+                        style={{
+                          color: "#ffffff",
+                          fontSize: "0.95rem",
+                          fontWeight: "600",
+                          textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+                        }}
+                      >
+                        {currentBook.author}
+                      </p>
+                    </div>
+                  </>
+                )}
               </motion.div>
             </div>
           </motion.div>
