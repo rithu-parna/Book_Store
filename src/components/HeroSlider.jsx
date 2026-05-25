@@ -91,20 +91,58 @@ export default function HeroSlider({ books, onOpenBook }) {
         alignItems: "center"
       }}
     >
-      {/* Dynamic Glowing Aura Background */}
+      {/* Immersive Motion Background Cover Image */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          overflow: "hidden"
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {currentBook.image && (
+            <motion.div
+              key={currentBook.id}
+              initial={{ scale: 1.15, opacity: 0 }}
+              animate={{ 
+                scale: 1.05, 
+                opacity: 0.28,
+                x: [0, 15, -15, 0],
+                y: [0, -10, 10, 0]
+              }}
+              exit={{ opacity: 0, scale: 1.2 }}
+              transition={{ 
+                opacity: { duration: 1.0 },
+                scale: { duration: 1.0 },
+                x: { repeat: Infinity, repeatType: "mirror", duration: 30, ease: "linear" },
+                y: { repeat: Infinity, repeatType: "mirror", duration: 30, ease: "linear" }
+              }}
+              style={{
+                position: "absolute",
+                inset: "-20px",
+                background: `url(${currentBook.image}) center/cover no-repeat`,
+                filter: "blur(25px) saturate(1.2)"
+              }}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Dynamic Glowing Aura Background Layer */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background: currentBook.themeColor,
-          opacity: 0.18,
+          opacity: 0.16,
           filter: "blur(90px)",
           transform: "scale(1.2)",
           transition: "background 0.8s ease",
-          zIndex: 0
+          zIndex: 1
         }}
       />
-      <div className="slide-gradient-overlay" />
+      <div className="slide-gradient-overlay" style={{ zIndex: 2 }} />
 
       {/* Main Slide Carousel Container */}
       <div

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen, Search, ShoppingBag, Heart, Sun, Moon, Sparkles, Menu, X } from "lucide-react";
+import { BookOpen, Search, ShoppingBag, Heart, Sun, Moon, Sparkles, Menu, X, Feather } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({
@@ -271,33 +271,83 @@ export default function Navbar({
           </AnimatePresence>
         </motion.button>
 
-        {/* Theme Toggle Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        {/* Premium Literary Theme Toggle */}
+        <div
           onClick={toggleTheme}
           style={{
+            position: "relative",
             cursor: "pointer",
-            padding: "0.5rem",
-            borderRadius: "var(--radius-circle)",
-            color: "var(--text-secondary)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            background: "var(--bg-secondary)",
             border: "1px solid var(--border-color)",
-            backgroundColor: "var(--bg-secondary)"
+            borderRadius: "24px",
+            padding: "3px 6px",
+            width: "155px",
+            height: "36px",
+            userSelect: "none",
+            overflow: "hidden",
+            boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
+            marginLeft: "0.5rem"
           }}
         >
+          {/* Active Capsule Overlay */}
           <motion.div
-            key={theme}
-            initial={{ rotate: -90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 90, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            layout
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            style={{
+              position: "absolute",
+              top: "3px",
+              bottom: "3px",
+              left: theme === "dark" ? "3px" : "calc(50% + 1px)",
+              width: "calc(50% - 4px)",
+              background: theme === "dark" 
+                ? "linear-gradient(135deg, var(--accent-primary), rgba(139, 92, 246, 0.6))"
+                : "linear-gradient(135deg, #f59e0b, #d97706)",
+              borderRadius: "20px",
+              zIndex: 1,
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)"
+            }}
+          />
+
+          {/* Dark Mode Label */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4px",
+              fontSize: "0.75rem",
+              fontWeight: "700",
+              zIndex: 2,
+              color: theme === "dark" ? "#ffffff" : "var(--text-muted)",
+              transition: "color 0.3s ease"
+            }}
           >
-            {theme === "dark" ? <Sun size={20} style={{ color: "#fbbf24" }} /> : <Moon size={20} style={{ color: "#4f46e5" }} />}
-          </motion.div>
-        </motion.button>
+            <Moon size={12} />
+            <span>Midnight</span>
+          </div>
+
+          {/* Light Mode Label */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4px",
+              fontSize: "0.75rem",
+              fontWeight: "700",
+              zIndex: 2,
+              color: theme !== "dark" ? "#ffffff" : "var(--text-muted)",
+              transition: "color 0.3s ease"
+            }}
+          >
+            <Feather size={12} />
+            <span>Alabaster</span>
+          </div>
+        </div>
 
         {/* Mobile Menu Toggle */}
         <button
