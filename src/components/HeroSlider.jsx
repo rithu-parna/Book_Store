@@ -31,6 +31,20 @@ export default function HeroSlider({ books, onOpenBook }) {
     }
   };
 
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const x = ((clientX - left) / width - 0.5) * 35;
+    const y = ((clientY - top) / height - 0.5) * 35;
+    setMousePos({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 });
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       handleNext();
@@ -80,6 +94,8 @@ export default function HeroSlider({ books, onOpenBook }) {
 
   return (
     <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       style={{
         position: "relative",
         width: "100%",
@@ -91,8 +107,16 @@ export default function HeroSlider({ books, onOpenBook }) {
         alignItems: "center"
       }}
     >
-      {/* Immersive Motion Background Cover Image */}
-      <div
+      {/* Immersive Motion Background Cover Image (Slow Pan + Interactive Parallax) */}
+      <motion.div
+        animate={{
+          x: [0, 8, -8, 0],
+          y: [0, -5, 5, 0]
+        }}
+        transition={{
+          x: { repeat: Infinity, repeatType: "mirror", duration: 25, ease: "linear" },
+          y: { repeat: Infinity, repeatType: "mirror", duration: 25, ease: "linear" }
+        }}
         style={{
           position: "absolute",
           inset: 0,
@@ -108,29 +132,34 @@ export default function HeroSlider({ books, onOpenBook }) {
               animate={{ 
                 scale: 1.05, 
                 opacity: 0.28,
-                x: [0, 15, -15, 0],
-                y: [0, -10, 10, 0]
+                x: mousePos.x,
+                y: mousePos.y
               }}
               exit={{ opacity: 0, scale: 1.2 }}
               transition={{ 
                 opacity: { duration: 1.0 },
                 scale: { duration: 1.0 },
-                x: { repeat: Infinity, repeatType: "mirror", duration: 30, ease: "linear" },
-                y: { repeat: Infinity, repeatType: "mirror", duration: 30, ease: "linear" }
+                x: { type: "spring", stiffness: 80, damping: 15 },
+                y: { type: "spring", stiffness: 80, damping: 15 }
               }}
               style={{
                 position: "absolute",
-                inset: "-20px",
+                inset: "-50px",
                 background: `url(${currentBook.image}) center/cover no-repeat`,
                 filter: "blur(25px) saturate(1.2)"
               }}
             />
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
 
-      {/* Dynamic Glowing Aura Background Layer */}
-      <div
+      {/* Dynamic Glowing Aura Background Layer (Responsive Volumetric Light) */}
+      <motion.div
+        animate={{
+          x: mousePos.x * 0.5,
+          y: mousePos.y * 0.5
+        }}
+        transition={{ type: "spring", stiffness: 80, damping: 15 }}
         style={{
           position: "absolute",
           inset: 0,
@@ -173,7 +202,11 @@ export default function HeroSlider({ books, onOpenBook }) {
             }}
           >
             {/* Left Column: Typography Details */}
-            <div style={{ flex: "1 1 500px", zIndex: 10 }}>
+            <motion.div
+              animate={{ x: -mousePos.x * 0.25, y: -mousePos.y * 0.25 }}
+              transition={{ type: "spring", stiffness: 80, damping: 15 }}
+              style={{ flex: "1 1 500px", zIndex: 10 }}
+            >
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -294,7 +327,7 @@ export default function HeroSlider({ books, onOpenBook }) {
                   ${currentBook.price}
                 </span>
               </motion.div>
-            </div>
+            </motion.div>
 
             {/* Right Column: Floating 3D-effect Cover */}
             <div
