@@ -44,17 +44,23 @@ export default function Navbar({
         <motion.div
           whileHover={{ scale: 1.1, rotate: 10 }}
           style={{
-            background: "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))",
-            color: "#ffffff",
-            padding: "0.5rem",
-            borderRadius: "var(--radius-md)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 4px 10px rgba(var(--accent-rgb), 0.3)"
+            cursor: "pointer"
           }}
         >
-          <BookOpen size={22} />
+          <img 
+            src="/logo.png" 
+            alt="Lumina Books Logo" 
+            style={{ 
+              width: "39px", 
+              height: "39px", 
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(139, 92, 246, 0.25)",
+              border: "1px solid var(--border-color)"
+            }} 
+          />
         </motion.div>
         <span
           className="font-serif"
