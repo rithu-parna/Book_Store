@@ -7,7 +7,6 @@ import BookMatcher from "./components/BookMatcher";
 import CartDrawer from "./components/CartDrawer";
 import GlobalBg from "./components/GlobalBg";
 import QuoteSanctuary from "./components/QuoteSanctuary";
-import AmbientPlayer from "./components/AmbientPlayer";
 import { booksData, categories } from "./data/books";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Heart, Library, Compass, HelpCircle } from "lucide-react";
@@ -148,10 +147,6 @@ export default function App() {
       {/* Global Interactive Motion Background */}
       <GlobalBg theme={theme} />
 
-      {/* Dynamic Blurred Blob Shadows */}
-      <div className="hero-glow-blob hero-glow-blob-1" />
-      <div className="hero-glow-blob hero-glow-blob-2" />
-
       {/* Navigation */}
       <Navbar
         cartCount={cartItems.reduce((acc, i) => acc + i.quantity, 0)}
@@ -171,8 +166,10 @@ export default function App() {
         onScrollToQuiz={handleScrollToQuiz}
       />
 
-      {/* Main Page Content */}
-      <main className="main-content">
+      {/* Main App Workspace */}
+      <div className="app-workspace">
+        {/* Main Page Content */}
+        <main className="main-content">
         {/* Slides / Hero Section */}
         <HeroSlider books={booksData} onOpenBook={setSelectedBook} />
 
@@ -329,6 +326,7 @@ export default function App() {
           © 2026 Lumina Literary Trust. All credentials verified.
         </span>
       </footer>
+      </div>
 
       {/* Slide-out Cart Drawer */}
       <CartDrawer
@@ -398,9 +396,6 @@ export default function App() {
           ))}
         </AnimatePresence>
       </div>
-
-      {/* Cozy Soundscape Ambient Player */}
-      <AmbientPlayer />
     </div>
   );
 }
