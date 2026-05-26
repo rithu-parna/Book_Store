@@ -6,7 +6,6 @@ import BookDetailModal from "./components/BookDetailModal";
 import BookMatcher from "./components/BookMatcher";
 import CartDrawer from "./components/CartDrawer";
 import GlobalBg from "./components/GlobalBg";
-import QuoteSanctuary from "./components/QuoteSanctuary";
 import { booksData, categories } from "./data/books";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Heart, Library, Compass, HelpCircle } from "lucide-react";
