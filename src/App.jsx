@@ -171,7 +171,7 @@ export default function App() {
         {/* Main Page Content */}
         <main className="main-content">
         {/* Slides / Hero Section */}
-        <HeroSlider books={booksData} onOpenBook={setSelectedBook} />
+        <HeroSlider books={booksData} onOpenBook={setSelectedBook} theme={theme} />
 
         {/* Catalog Section Header */}
         <div style={{ maxWidth: "1200px", margin: "4rem auto 0 auto", padding: "0 2rem" }}>

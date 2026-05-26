@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, BookOpen, Star, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function HeroSlider({ books, onOpenBook }) {
+export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isDark = theme !== "light";
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
 
   const featuredBooks = books.slice(0, 4); // Showcase first 4 books
@@ -131,7 +132,7 @@ export default function HeroSlider({ books, onOpenBook }) {
               initial={{ scale: 1.1, opacity: 0 }}
               animate={{
                 scale: 1,
-                opacity: 0.38,
+                opacity: isDark ? 0.38 : 1,
                 x: mousePos.x * 0.4,
                 y: mousePos.y * 0.4
               }}
@@ -145,7 +146,9 @@ export default function HeroSlider({ books, onOpenBook }) {
               style={{
                 position: "absolute",
                 inset: "-20px",
-                background: `linear-gradient(to left, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%), url(${currentBook.image}) left/cover no-repeat`,
+                background: isDark
+                  ? `linear-gradient(to left, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%), url(${currentBook.image}) left/cover no-repeat`
+                  : `linear-gradient(to left, var(--bg-primary) 0%, rgba(250, 246, 240, 0.16) 50%, rgba(250, 246, 240, 0) 100%), url(${currentBook.image}) left/cover no-repeat`,
                 filter: "contrast(1.05) brightness(0.8)"
               }}
             />
@@ -164,7 +167,7 @@ export default function HeroSlider({ books, onOpenBook }) {
           position: "absolute",
           inset: 0,
           background: currentBook.themeColor,
-          opacity: 0.16,
+          opacity: isDark ? 0.16 : 0.02,
           filter: "blur(90px)",
           transform: "scale(1.2)",
           transition: "background 0.8s ease",
@@ -240,7 +243,7 @@ export default function HeroSlider({ books, onOpenBook }) {
                   lineHeight: "1.1",
                   fontWeight: "800",
                   marginBottom: "1rem",
-                  color: "var(--text-primary)",
+                  color: "#ffffff",
                   textShadow: "0 2px 12px rgba(0, 0, 0, 0.85)"
                 }}
               >
@@ -253,13 +256,13 @@ export default function HeroSlider({ books, onOpenBook }) {
                 transition={{ delay: 0.3 }}
                 style={{
                   fontSize: "1.15rem",
-                  color: "var(--text-secondary)",
+                  color: "rgba(255, 255, 255, 0.9)",
                   fontWeight: "500",
                   marginBottom: "1rem",
                   textShadow: "0 2px 8px rgba(0, 0, 0, 0.85)"
                 }}
               >
-                by <span style={{ color: "var(--text-primary)" }}>{currentBook.author}</span>
+                by <span style={{ color: "#ffffff" }}>{currentBook.author}</span>
               </motion.p>
 
               <motion.div
@@ -277,7 +280,7 @@ export default function HeroSlider({ books, onOpenBook }) {
                     />
                   ))}
                 </span>
-                <span style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "600" }}>
+                <span style={{ fontSize: "0.85rem", color: "rgba(255, 255, 255, 0.65)", fontWeight: "600" }}>
                   ({currentBook.reviewsCount} Literary Reviews)
                 </span>
               </motion.div>
@@ -288,7 +291,7 @@ export default function HeroSlider({ books, onOpenBook }) {
                 transition={{ delay: 0.4 }}
                 style={{
                   fontSize: "1.05rem",
-                  color: "var(--text-secondary)",
+                  color: "rgba(255, 255, 255, 0.85)",
                   marginBottom: "2rem",
                   maxWidth: "520px",
                   lineHeight: "1.7",
@@ -470,9 +473,9 @@ export default function HeroSlider({ books, onOpenBook }) {
           left: "2rem",
           zIndex: 25,
           cursor: "pointer",
-          backgroundColor: "rgba(var(--accent-rgb), 0.05)",
-          border: "1px solid var(--border-color)",
-          color: "var(--text-primary)",
+          backgroundColor: "rgba(255, 255, 255, 0.08)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          color: "#ffffff",
           width: "48px",
           height: "48px",
           borderRadius: "50%",
@@ -482,12 +485,12 @@ export default function HeroSlider({ books, onOpenBook }) {
           transition: "var(--transition-fast)"
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(var(--accent-rgb), 0.15)";
-          e.currentTarget.style.borderColor = "var(--accent-primary)";
+          e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.18)";
+          e.currentTarget.style.borderColor = currentBook.coverAccent;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(var(--accent-rgb), 0.05)";
-          e.currentTarget.style.borderColor = "var(--border-color)";
+          e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.08)";
+          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
         }}
       >
         <ChevronLeft size={22} />
@@ -499,9 +502,9 @@ export default function HeroSlider({ books, onOpenBook }) {
           right: "2rem",
           zIndex: 25,
           cursor: "pointer",
-          backgroundColor: "rgba(var(--accent-rgb), 0.05)",
-          border: "1px solid var(--border-color)",
-          color: "var(--text-primary)",
+          backgroundColor: "rgba(255, 255, 255, 0.08)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          color: "#ffffff",
           width: "48px",
           height: "48px",
           borderRadius: "50%",
@@ -511,12 +514,12 @@ export default function HeroSlider({ books, onOpenBook }) {
           transition: "var(--transition-fast)"
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(var(--accent-rgb), 0.15)";
-          e.currentTarget.style.borderColor = "var(--accent-primary)";
+          e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.18)";
+          e.currentTarget.style.borderColor = currentBook.coverAccent;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "rgba(var(--accent-rgb), 0.05)";
-          e.currentTarget.style.borderColor = "var(--border-color)";
+          e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.08)";
+          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
         }}
       >
         <ChevronRight size={22} />
@@ -542,7 +545,7 @@ export default function HeroSlider({ books, onOpenBook }) {
               width: currentIndex === i ? "24px" : "8px",
               height: "8px",
               borderRadius: "4px",
-              backgroundColor: currentIndex === i ? currentBook.coverAccent : "var(--text-muted)",
+              backgroundColor: currentIndex === i ? currentBook.coverAccent : "rgba(255, 255, 255, 0.35)",
               cursor: "pointer",
               transition: "all 0.3s ease"
             }}
