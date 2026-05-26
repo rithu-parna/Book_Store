@@ -37,6 +37,13 @@ export default function Navbar({
         justifyContent: "space-between",
         padding: "0 2rem",
         borderBottom: "1px solid var(--border-color)",
+        background: theme === "dark" 
+          ? "linear-gradient(to bottom, rgba(9, 14, 30, 0.65) 0%, rgba(3, 5, 12, 0.75) 100%)"
+          : "linear-gradient(to bottom, rgba(251, 249, 246, 0.8) 0%, rgba(244, 237, 212, 0.85) 100%)",
+        backdropFilter: "blur(20px)",
+        boxShadow: theme === "dark"
+          ? "0 4px 30px rgba(139, 92, 246, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.05)"
+          : "0 4px 30px rgba(217, 119, 6, 0.08)"
       }}
     >
       {/* Brand Logo */}
@@ -283,7 +290,7 @@ export default function Navbar({
             border: "1px solid var(--border-color)",
             borderRadius: "24px",
             padding: "3px 6px",
-            width: "155px",
+            width: "70px",
             height: "36px",
             userSelect: "none",
             overflow: "hidden",
@@ -326,7 +333,7 @@ export default function Navbar({
             }}
           >
             <Moon size={12} />
-            <span>Midnight</span>
+            {/* <span>Midnight</span> */}
           </div>
 
           {/* Light Mode Label */}
@@ -345,7 +352,7 @@ export default function Navbar({
             }}
           >
             <Feather size={12} />
-            <span>Alabaster</span>
+            {/* <span>Alabaster</span> */}
           </div>
         </div>
 
