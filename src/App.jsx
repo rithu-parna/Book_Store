@@ -5,6 +5,9 @@ import BookCard from "./components/BookCard";
 import BookDetailModal from "./components/BookDetailModal";
 import BookMatcher from "./components/BookMatcher";
 import CartDrawer from "./components/CartDrawer";
+import GlobalBg from "./components/GlobalBg";
+import QuoteSanctuary from "./components/QuoteSanctuary";
+import AmbientPlayer from "./components/AmbientPlayer";
 import { booksData, categories } from "./data/books";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Heart, Library, Compass, HelpCircle } from "lucide-react";
@@ -142,6 +145,9 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Global Interactive Motion Background */}
+      <GlobalBg theme={theme} />
+
       {/* Dynamic Blurred Blob Shadows */}
       <div className="hero-glow-blob hero-glow-blob-1" />
       <div className="hero-glow-blob hero-glow-blob-2" />
@@ -285,6 +291,9 @@ export default function App() {
           </AnimatePresence>
         </div>
 
+        {/* Quotation Sanctuary */}
+        <QuoteSanctuary />
+
         {/* Book Matcher Recommendation Widget */}
         <div style={{ padding: "0 2rem", margin: "6rem 0" }}>
           <BookMatcher
@@ -389,6 +398,9 @@ export default function App() {
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Cozy Soundscape Ambient Player */}
+      <AmbientPlayer />
     </div>
   );
 }
