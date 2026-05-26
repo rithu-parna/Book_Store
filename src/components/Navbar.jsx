@@ -106,8 +106,8 @@ export default function Navbar({
               }}
               className="sidebar-link active-hover"
               style={{
-                backgroundColor: activeCategory === "All Collections" ? "rgba(var(--accent-rgb), 0.08)" : "transparent",
-                color: activeCategory === "All Collections" ? "var(--accent-primary)" : "var(--text-primary)"
+                backgroundColor: activeCategory === "All Collections" ? "var(--sidebar-active-bg)" : "transparent",
+                color: activeCategory === "All Collections" ? "var(--sidebar-active-text)" : "var(--text-primary)"
               }}
             >
               <LayoutGrid size={16} />
@@ -163,8 +163,8 @@ export default function Navbar({
                   }}
                   className="sidebar-category-link"
                   style={{
-                    backgroundColor: isSelected ? "rgba(var(--accent-rgb), 0.12)" : "transparent",
-                    color: isSelected ? "var(--accent-primary)" : "var(--text-secondary)",
+                    backgroundColor: isSelected ? "var(--sidebar-active-bg)" : "transparent",
+                    color: isSelected ? "var(--sidebar-active-text)" : "var(--text-secondary)",
                     fontWeight: isSelected ? "700" : "500",
                     borderLeft: isSelected ? "3px solid var(--accent-primary)" : "3px solid transparent",
                     paddingLeft: isSelected ? "0.6rem" : "0.75rem"

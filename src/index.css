@@ -22,19 +22,21 @@
   --bg-secondary: #0b0b0b;
   --bg-tertiary: #141414;
   --text-primary: #ffffff;
-  --text-secondary: #a3a3a3; /* Neutral Silver */
-  --text-muted: #666666; /* Neutral Gray */
-  --accent-primary: #8b5cf6; /* Electric Violet */
-  --accent-secondary: #06b6d4; /* Neon Cyan/Blue */
-  --accent-rgb: 139, 92, 246;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(139, 92, 246, 0.4);
+  --text-secondary: #cbd5e1; /* Warm Silver/Slate */
+  --text-muted: #64748b; /* Muted Slate */
+  --accent-primary: #bd5338; /* Rich Terracotta/Rust */
+  --accent-secondary: #e68f7a; /* Coral/Peach Accent */
+  --accent-rgb: 189, 83, 56;
+  --border-color: rgba(120, 50, 29, 0.25);
+  --border-focus: rgba(189, 83, 56, 0.6);
   --card-bg: rgba(11, 11, 11, 0.7);
-  --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  --card-hover-shadow: 0 20px 40px rgba(189, 83, 56, 0.18);
   --glass-bg: rgba(0, 0, 0, 0.8);
   --glass-blur: 20px;
-  --toast-success: #10b981;
-  --sidebar-bg: rgba(0, 0, 0, 0.65);
+  --toast-success: #bd5338;
+  --sidebar-bg: #78321d7a;
+  --sidebar-active-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-active-text: #ffffff;
 }
 
 /* Warm Alabaster (Light Mode) */
@@ -56,6 +58,8 @@
   --glass-blur: 24px;
   --toast-success: #059669;
   --sidebar-bg: #c0813a3b;
+  --sidebar-active-bg: rgba(192, 129, 58, 0.15);
+  --sidebar-active-text: var(--accent-primary);
 }
 
 /* Global Reset & Base */
@@ -309,7 +313,7 @@ button, input, select, textarea {
 .slide-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--bg-primary) 38%, rgba(var(--accent-rgb), 0.08) 65%, transparent 100%);
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.2) 0%, rgba(var(--accent-rgb), 0.01) 100%, transparent 100%);
   z-index: 2;
 }
 

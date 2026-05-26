@@ -128,25 +128,25 @@ export default function HeroSlider({ books, onOpenBook }) {
           {currentBook.image && (
             <motion.div
               key={currentBook.id}
-              initial={{ scale: 1.15, opacity: 0 }}
-              animate={{ 
-                scale: 1.05, 
-                opacity: 0.28,
-                x: mousePos.x,
-                y: mousePos.y
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{
+                scale: 1,
+                opacity: 0.38,
+                x: mousePos.x * 0.4,
+                y: mousePos.y * 0.4
               }}
-              exit={{ opacity: 0, scale: 1.2 }}
-              transition={{ 
-                opacity: { duration: 1.0 },
-                scale: { duration: 1.0 },
-                x: { type: "spring", stiffness: 80, damping: 15 },
-                y: { type: "spring", stiffness: 80, damping: 15 }
+              exit={{ opacity: 0, scale: 1.1 }}
+              transition={{
+                opacity: { duration: 0.8 },
+                scale: { duration: 0.8 },
+                x: { type: "spring", stiffness: 80, damping: 20 },
+                y: { type: "spring", stiffness: 80, damping: 20 }
               }}
               style={{
                 position: "absolute",
-                inset: "-50px",
-                background: `url(${currentBook.image}) center/cover no-repeat`,
-                filter: "blur(25px) saturate(1.2)"
+                inset: "-20px",
+                background: `linear-gradient(to left, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%), url(${currentBook.image}) left/cover no-repeat`,
+                filter: "contrast(1.05) brightness(0.8)"
               }}
             />
           )}
@@ -240,7 +240,8 @@ export default function HeroSlider({ books, onOpenBook }) {
                   lineHeight: "1.1",
                   fontWeight: "800",
                   marginBottom: "1rem",
-                  color: "var(--text-primary)"
+                  color: "var(--text-primary)",
+                  textShadow: "0 2px 12px rgba(0, 0, 0, 0.85)"
                 }}
               >
                 {currentBook.title}
@@ -254,7 +255,8 @@ export default function HeroSlider({ books, onOpenBook }) {
                   fontSize: "1.15rem",
                   color: "var(--text-secondary)",
                   fontWeight: "500",
-                  marginBottom: "1rem"
+                  marginBottom: "1rem",
+                  textShadow: "0 2px 8px rgba(0, 0, 0, 0.85)"
                 }}
               >
                 by <span style={{ color: "var(--text-primary)" }}>{currentBook.author}</span>
@@ -289,7 +291,8 @@ export default function HeroSlider({ books, onOpenBook }) {
                   color: "var(--text-secondary)",
                   marginBottom: "2rem",
                   maxWidth: "520px",
-                  lineHeight: "1.7"
+                  lineHeight: "1.7",
+                  textShadow: "0 2px 8px rgba(0, 0, 0, 0.85)"
                 }}
               >
                 {currentBook.description}
@@ -344,10 +347,10 @@ export default function HeroSlider({ books, onOpenBook }) {
                 initial={coverMotions[currentBook.id]?.initial || { scale: 0.8, opacity: 0, rotate: -5 }}
                 animate={coverMotions[currentBook.id]?.animate || { scale: 1, opacity: 1, rotate: 3 }}
                 transition={coverMotions[currentBook.id]?.transition || { type: "spring", stiffness: 100, delay: 0.2 }}
-                whileHover={{ 
-                  rotateY: 18, 
-                  rotateX: -12, 
-                  scale: 1.06, 
+                whileHover={{
+                  rotateY: 18,
+                  rotateX: -12,
+                  scale: 1.06,
                   y: -12,
                   boxShadow: `0 35px 60px -10px ${currentBook.glowColor || "rgba(0,0,0,0.6)"}`
                 }}
@@ -357,8 +360,8 @@ export default function HeroSlider({ books, onOpenBook }) {
                   width: "250px",
                   height: "360px",
                   borderRadius: "8px 16px 16px 8px",
-                  background: currentBook.image 
-                    ? `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%), url(${currentBook.image}) center/cover no-repeat` 
+                  background: currentBook.image
+                    ? `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%), url(${currentBook.image}) center/cover no-repeat`
                     : currentBook.themeColor,
                   boxShadow: `0 25px 50px -12px ${currentBook.glowColor || "rgba(0,0,0,0.5)"}`,
                   border: "1px solid rgba(255,255,255,0.1)",
