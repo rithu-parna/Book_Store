@@ -1,37 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import { Star, Heart, Eye, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, isWishlisted }) {
+export default function BookCard({ 
+  book, 
+  onOpen, 
+  onAddToCart, 
+  onToggleWishlist, 
+  isWishlisted,
+  onMouseEnter,
+  onMouseLeave
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <motion.div
       layout
       initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
+      animate={{ 
+        opacity: 1, 
+        scale: 1,
+        y: isHovered ? -8 : 0, 
+        borderColor: isHovered ? `${book.coverAccent}40` : "var(--border-color)", 
+        boxShadow: isHovered 
+          ? `0 20px 40px -15px ${book.glowColor || "rgba(0,0,0,0.15)"}` 
+          : "0 4px 20px rgba(0,0,0,0.02)" 
+      }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.3 }}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        if (onMouseEnter) onMouseEnter();
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        if (onMouseLeave) onMouseLeave();
+      }}
       className="glass-card"
+      transition={{ type: "spring", stiffness: 350, damping: 25 }}
       style={{
         display: "flex",
         flexDirection: "column",
         height: "100%",
         padding: "1.25rem",
         position: "relative",
-        overflow: "hidden",
-        perspective: "800px"
+        overflow: "visible", // Allowed overflow to prevent 3D clipping
+        perspective: "1000px"
       }}
     >
       {/* Hover Glow Aura */}
-      <div
+      <motion.div
         className="card-glow"
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
         style={{
           position: "absolute",
           inset: 0,
-          background: `radial-gradient(circle at 50% 35%, ${book.glowColor || book.coverAccent}14, transparent 70%)`,
-          opacity: 0,
-          transition: "opacity 0.4s ease",
+          background: `radial-gradient(circle at 50% 35%, ${book.glowColor || book.coverAccent}22, transparent 75%)`,
           pointerEvents: "none",
-          zIndex: 0
+          zIndex: 0,
+          borderRadius: "var(--radius-md)"
         }}
       />
 
@@ -42,7 +69,7 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: "1rem",
-          zIndex: 1
+          zIndex: 2
         }}
       >
         <span
@@ -79,32 +106,32 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
       </div>
 
       {/* 3D Physical Book Model Container */}
-      <div
+      <motion.div
         style={{
           position: "relative",
           width: "100%",
           height: "240px",
           perspective: "1000px",
           marginBottom: "1.25rem",
-          zIndex: 1
+          zIndex: 2
         }}
       >
         <motion.div
           onClick={onOpen}
-          whileHover={{
-            rotateY: 22,
-            rotateX: 6,
-            scale: 1.04,
-            boxShadow: `0 20px 35px -8px ${book.glowColor || "rgba(0,0,0,0.4)"}`
+          animate={{
+            rotateY: isHovered ? 26 : 10,
+            rotateX: isHovered ? 6 : 3,
+            scale: isHovered ? 1.05 : 1,
+            boxShadow: isHovered 
+              ? `0 20px 35px -8px ${book.glowColor || "rgba(0,0,0,0.35)"}` 
+              : `0 10px 20px -5px rgba(0,0,0,0.18)`
           }}
-          transition={{ type: "spring", stiffness: 120, damping: 15 }}
+          transition={{ type: "spring", stiffness: 180, damping: 18 }}
           style={{
             position: "absolute",
             inset: 0,
             cursor: "pointer",
             transformStyle: "preserve-3d",
-            transition: "box-shadow 0.3s ease",
-            boxShadow: `0 10px 20px -5px ${book.glowColor || "rgba(0,0,0,0.25)"}`,
             borderRadius: "4px 8px 8px 4px"
           }}
         >
@@ -114,7 +141,7 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
               position: "absolute",
               inset: 0,
               background: book.image 
-                ? `linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%), url(${book.image}) center/cover no-repeat` 
+                ? `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.2) 100%), url(${book.image}) center/cover no-repeat` 
                 : book.themeColor,
               borderRadius: "4px 8px 8px 4px",
               border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -135,7 +162,7 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
               }}
             />
             
-            {/* Cover Title/Author for abstract covers */}
+            {/* Cover Title/Author for abstract themeColor covers */}
             {!book.image && (
               <div style={{ padding: "1.25rem", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <div>
@@ -185,20 +212,20 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
 
           {/* Quick View Button Hover Overlay */}
           <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.25 }}
             style={{
               position: "absolute",
               inset: 0,
-              backgroundColor: "rgba(0,0,0,0.55)",
-              backdropFilter: "blur(2.5px)",
+              backgroundColor: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(3px)",
               zIndex: 7, // above front cover layer
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "4px 8px 8px 4px",
               transform: "translateZ(9px)",
-              transition: "opacity 0.25s ease"
+              pointerEvents: isHovered ? "auto" : "none" // Prevent blocking clicks when hidden
             }}
           >
             <span
@@ -222,22 +249,23 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
             </span>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Book Metadata */}
-      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", zIndex: 1 }}>
+      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", zIndex: 2 }}>
         <div>
-          <h3
+          <motion.h3
+            animate={{ color: isHovered ? book.coverAccent : "var(--text-primary)" }}
+            transition={{ duration: 0.25 }}
             style={{
-              fontSize: "1rem",
+              fontSize: "1.05rem",
               fontWeight: "700",
-              marginBottom: "0.25rem",
-              color: "var(--text-primary)",
+              marginBottom: "0.3rem",
               lineHeight: "1.3"
             }}
           >
             {book.title}
-          </h3>
+          </motion.h3>
           <p
             style={{
               fontSize: "0.85rem",
@@ -298,7 +326,7 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
               fontFamily: "var(--font-title)"
             }}
           >
-            ${book.price}
+            ${book.price.toFixed(2)}
           </span>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -312,7 +340,6 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
               padding: "0.5rem 1.2rem",
               fontSize: "0.8rem",
               borderRadius: "20px",
-              background: `linear-gradient(135deg, ${book.coverAccent}, ${book.coverAccent}d9)`,
               color: "#ffffff",
               border: "none",
               boxShadow: `0 4px 12px ${book.glowColor || "rgba(0,0,0,0.2)"}`

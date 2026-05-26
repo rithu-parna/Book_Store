@@ -11,10 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Heart, Library, Compass, HelpCircle } from "lucide-react";
 
 export default function App() {
-  // Theme State (Dark Mode default)
   const [theme, setTheme] = useState("dark");
-
-  // Cart and Wishlist States
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -26,6 +23,7 @@ export default function App() {
 
   // Selected Book for Modal
   const [selectedBook, setSelectedBook] = useState(null);
+  const [hoveredBook, setHoveredBook] = useState(null);
 
   // Toast Notifications State
   const [toasts, setToasts] = useState([]);
@@ -144,7 +142,7 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Global Interactive Motion Background */}
-      <GlobalBg theme={theme} />
+      <GlobalBg theme={theme} activeBook={selectedBook || hoveredBook} />
 
       {/* Navigation */}
       <Navbar
@@ -280,6 +278,8 @@ export default function App() {
                     onAddToCart={handleAddToCart}
                     onToggleWishlist={handleToggleWishlist}
                     isWishlisted={wishlistItems.some((w) => w.id === book.id)}
+                    onMouseEnter={() => setHoveredBook(book)}
+                    onMouseLeave={() => setHoveredBook(null)}
                   />
                 ))}
               </motion.div>

@@ -160,11 +160,6 @@ button, input, select, textarea {
   transition: var(--transition-smooth);
 }
 
-.glass-card:hover {
-  border-color: rgba(var(--accent-rgb), 0.35);
-  box-shadow: var(--card-hover-shadow);
-  transform: translateY(-6px);
-}
 
 /* Typography Utilities */
 .font-serif {
