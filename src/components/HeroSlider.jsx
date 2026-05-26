@@ -97,6 +97,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      className="hero-slider-container"
       style={{
         position: "relative",
         width: "100%",
@@ -195,6 +196,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
             initial="enter"
             animate="center"
             exit="exit"
+            className="hero-slide-content"
             style={{
               display: "flex",
               alignItems: "center",
@@ -208,6 +210,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
             <motion.div
               animate={{ x: -mousePos.x * 0.25, y: -mousePos.y * 0.25 }}
               transition={{ type: "spring", stiffness: 80, damping: 15 }}
+              className="hero-slide-left"
               style={{ flex: "1 1 500px", zIndex: 10 }}
             >
               <motion.div
@@ -237,7 +240,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="font-serif"
+                className="font-serif hero-slide-title"
                 style={{
                   fontSize: "3.2rem",
                   lineHeight: "1.1",
@@ -289,6 +292,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
+                className="hero-slide-desc"
                 style={{
                   fontSize: "1.05rem",
                   color: "rgba(255, 255, 255, 0.85)",
@@ -305,6 +309,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
+                className="hero-slide-actions"
                 style={{ display: "flex", gap: "1rem", alignItems: "center" }}
               >
                 <button

@@ -33,6 +33,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
+      className="detail-modal-overlay"
       style={{
         position: "fixed",
         inset: 0,
@@ -52,7 +53,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
         exit={{ y: 80, rotateY: -12, rotateX: -4, scale: 0.92, opacity: 0 }}
         transition={{ type: "spring", stiffness: 220, damping: 24 }}
         onClick={(e) => e.stopPropagation()}
-        className="glass"
+        className="glass detail-modal-content"
         style={{
           width: "100%",
           maxWidth: "880px",
@@ -100,6 +101,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
 
         {/* Hero Banner Section (Cover gradient styling) */}
         <div
+          className="detail-modal-hero"
           style={{
             background: book.themeColor,
             padding: "3rem 2rem 2.5rem 2rem",
@@ -274,6 +276,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
 
         {/* Tab Selection Bar */}
         <div
+          className="detail-modal-tabs"
           style={{
             display: "flex",
             borderBottom: "1px solid var(--border-color)",
@@ -290,6 +293,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
+              className="detail-modal-tab-btn"
               style={{
                 padding: "1rem 1.25rem",
                 fontSize: "0.9rem",
@@ -310,7 +314,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
         </div>
 
         {/* Tab Content Display Area */}
-        <div style={{ padding: "2rem", flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <div className="detail-modal-content-area" style={{ padding: "2rem", flexGrow: 1, display: "flex", flexDirection: "column" }}>
           <AnimatePresence mode="wait">
             {activeTab === "overview" && (
               <motion.div
@@ -603,6 +607,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
 
         {/* Footer Checkout Button */}
         <div
+          className="detail-modal-footer"
           style={{
             position: "sticky",
             bottom: 0,
