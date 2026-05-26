@@ -289,7 +289,6 @@ export default function App() {
         </div>
 
         {/* Quotation Sanctuary */}
-        <QuoteSanctuary />
 
         {/* Book Matcher Recommendation Widget */}
         <div style={{ padding: "0 2rem", margin: "6rem 0" }}>

@@ -137,46 +137,103 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
             }}
           />
 
-          {/* Book Image/3D Cover Art */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
+          {/* 3D Physical Book Model Cover Art in Modal */}
+          <div
             style={{
+              position: "relative",
               width: "150px",
               height: "220px",
-              borderRadius: "4px 8px 8px 4px",
-              background: book.image 
-                ? `linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.6) 100%), url(${book.image}) center/cover no-repeat` 
-                : book.themeColor,
-              boxShadow: "0 15px 30px rgba(0,0,0,0.5)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              zIndex: 2,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              padding: "1rem",
-              position: "relative"
+              perspective: "1000px",
+              zIndex: 2
             }}
           >
-            {/* Spine Overlay */}
-            <div
+            <motion.div
+              initial={{ y: 20, rotateY: 15, rotateX: 6, opacity: 0 }}
+              animate={{ y: 0, rotateY: 15, rotateX: 6, opacity: 1 }}
+              transition={{ delay: 0.1, type: "spring", stiffness: 100 }}
               style={{
                 position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: "8px",
-                background: "linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(255,255,255,0.05) 45%, rgba(0,0,0,0.2) 100%)",
-                zIndex: 3
+                inset: 0,
+                transformStyle: "preserve-3d",
+                boxShadow: `0 15px 30px rgba(0,0,0,0.4)`
               }}
-            />
-            <div>
-              {!book.image && <div style={{ height: "2px", width: "20px", backgroundColor: book.coverAccent, marginBottom: "0.25rem" }} />}
-              {!book.image && <h5 className="font-serif" style={{ color: "#fff", fontSize: "0.85rem", fontWeight: "700" }}>{book.title}</h5>}
-            </div>
-            {!book.image && <p style={{ color: "#cbd5e1", fontSize: "0.65rem" }}>{book.author}</p>}
-          </motion.div>
+            >
+              {/* Front Cover */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: book.image 
+                    ? `linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%), url(${book.image}) center/cover no-repeat` 
+                    : book.themeColor,
+                  borderRadius: "3px 6px 6px 3px",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  transform: "translateZ(6px)",
+                  zIndex: 5
+                }}
+              >
+                {/* Spine Shadow */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "8px",
+                    background: "linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.05) 45%, rgba(0,0,0,0.2) 100%)",
+                    zIndex: 6
+                  }}
+                />
+                
+                {/* Cover text for abstract covers */}
+                {!book.image && (
+                  <div style={{ padding: "1rem", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                    <div>
+                      <div style={{ height: "2px", width: "20px", backgroundColor: book.coverAccent, marginBottom: "0.25rem" }} />
+                      <h5 className="font-serif" style={{ color: "#fff", fontSize: "0.85rem", fontWeight: "700", lineHeight: "1.2" }}>{book.title}</h5>
+                    </div>
+                    <p style={{ color: "#cbd5e1", fontSize: "0.65rem" }}>{book.author}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* 3D Pages (Right Edge) */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "2px",
+                  bottom: "2px",
+                  right: "0",
+                  width: "12px",
+                  backgroundColor: "var(--bg-secondary)",
+                  border: "1px solid var(--border-color)",
+                  backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+                  transform: "rotateY(90deg) translateZ(6px)",
+                  transformOrigin: "right center",
+                  borderRadius: "0 2px 2px 0",
+                  zIndex: 4
+                }}
+              />
+
+              {/* 3D Bottom Pages */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "2px",
+                  right: "2px",
+                  bottom: "0",
+                  height: "12px",
+                  backgroundColor: "var(--bg-secondary)",
+                  border: "1px solid var(--border-color)",
+                  backgroundImage: "repeating-linear-gradient(to right, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+                  transform: "rotateX(90deg) translateZ(6px)",
+                  transformOrigin: "center bottom",
+                  borderRadius: "0 0 2px 2px",
+                  zIndex: 4
+                }}
+              />
+            </motion.div>
+          </div>
 
           {/* Editorial Book Title & Author */}
           <div style={{ zIndex: 2, flex: "1 1 300px" }}>
@@ -237,8 +294,8 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                 padding: "1rem 1.25rem",
                 fontSize: "0.9rem",
                 fontWeight: "600",
-                color: activeTab === tab.id ? "var(--accent-primary)" : "var(--text-secondary)",
-                borderBottom: activeTab === tab.id ? "2px solid var(--accent-primary)" : "2px solid transparent",
+                color: activeTab === tab.id ? book.coverAccent : "var(--text-secondary)",
+                borderBottom: activeTab === tab.id ? `2px solid ${book.coverAccent}` : "2px solid transparent",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -274,10 +331,12 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                       flexDirection: "column",
                       alignItems: "center",
                       gap: "0.25rem",
-                      textAlign: "center"
+                      textAlign: "center",
+                      border: `1px solid ${book.coverAccent}22`,
+                      background: `linear-gradient(to bottom, var(--card-bg), ${book.coverAccent}06)`
                     }}
                   >
-                    <Calendar size={16} style={{ color: "var(--accent-primary)" }} />
+                    <Calendar size={16} style={{ color: book.coverAccent }} />
                     <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: "600" }}>PUBLISHED</span>
                     <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>{book.publishYear}</span>
                   </div>
@@ -291,10 +350,12 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                       flexDirection: "column",
                       alignItems: "center",
                       gap: "0.25rem",
-                      textAlign: "center"
+                      textAlign: "center",
+                      border: `1px solid ${book.coverAccent}22`,
+                      background: `linear-gradient(to bottom, var(--card-bg), ${book.coverAccent}06)`
                     }}
                   >
-                    <BookOpen size={16} style={{ color: "var(--accent-primary)" }} />
+                    <BookOpen size={16} style={{ color: book.coverAccent }} />
                     <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: "600" }}>PAGES</span>
                     <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>{book.pages} Pages</span>
                   </div>
@@ -308,13 +369,15 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                       flexDirection: "column",
                       alignItems: "center",
                       gap: "0.25rem",
-                      textAlign: "center"
+                      textAlign: "center",
+                      border: `1px solid ${book.coverAccent}22`,
+                      background: `linear-gradient(to bottom, var(--card-bg), ${book.coverAccent}06)`
                     }}
                   >
-                    <Award size={16} style={{ color: "var(--accent-primary)" }} />
+                    <Award size={16} style={{ color: book.coverAccent }} />
                     <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: "600" }}>RATING</span>
                     <span style={{ fontSize: "0.9rem", fontWeight: "700", display: "flex", alignItems: "center", gap: "2px" }}>
-                      {book.rating} <Star size={12} fill="currentColor" style={{ color: "#fbbf24" }} />
+                      {book.rating} <Star size={12} fill="currentColor" style={{ color: "#eab308" }} />
                     </span>
                   </div>
                 </div>
@@ -336,9 +399,9 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                           fontSize: "0.8rem",
                           padding: "0.3rem 0.8rem",
                           borderRadius: "20px",
-                          border: "1px solid var(--border-color)",
-                          backgroundColor: "var(--bg-secondary)",
-                          color: "var(--text-secondary)",
+                          border: `1px solid ${book.coverAccent}25`,
+                          backgroundColor: `${book.coverAccent}12`,
+                          color: book.coverAccent,
                           fontWeight: "600"
                         }}
                       >
@@ -387,7 +450,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                         className="audio-bar"
                         style={{
                           width: "4px",
-                          backgroundColor: "var(--accent-primary)",
+                          backgroundColor: book.coverAccent,
                           borderRadius: "4px"
                         }}
                       />
@@ -429,7 +492,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                         left: 0,
                         height: "100%",
                         width: `${audioProgress}%`,
-                        backgroundColor: "var(--accent-primary)",
+                        backgroundColor: book.coverAccent,
                         borderRadius: "2px"
                       }}
                     />
@@ -447,7 +510,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                       onClick={() => setIsPlayingAudio(!isPlayingAudio)}
                       style={{
                         cursor: "pointer",
-                        background: "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))",
+                        background: `linear-gradient(135deg, ${book.coverAccent}, ${book.coverAccent}cc)`,
                         color: "#fff",
                         width: "54px",
                         height: "54px",
@@ -455,7 +518,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: "0 6px 15px rgba(var(--accent-rgb), 0.35)"
+                        boxShadow: `0 6px 15px ${book.glowColor || "rgba(0,0,0,0.3)"}`
                       }}
                     >
                       {isPlayingAudio ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" style={{ marginLeft: "3px" }} />}
@@ -476,7 +539,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                 {/* Score Summary Block */}
                 <div style={{ display: "flex", gap: "2rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div style={{ textAlign: "center" }}>
-                    <h3 style={{ fontSize: "3rem", fontWeight: "800", fontFamily: "var(--font-title)", color: "var(--accent-primary)" }}>
+                    <h3 style={{ fontSize: "3rem", fontWeight: "800", fontFamily: "var(--font-title)", color: book.coverAccent }}>
                       {book.rating}
                     </h3>
                     <div className="rating-stars" style={{ marginBottom: "0.25rem" }}>
@@ -502,7 +565,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                         <span style={{ fontSize: "0.8rem", fontWeight: "600", width: "12px" }}>{row.stars}</span>
                         <Star size={11} fill="currentColor" style={{ color: "#fbbf24", opacity: 0.7 }} />
                         <div style={{ flexGrow: 1, height: "6px", backgroundColor: "var(--bg-tertiary)", borderRadius: "3px", overflow: "hidden" }}>
-                          <div style={{ width: `${row.pct}%`, height: "100%", backgroundColor: "var(--accent-primary)", borderRadius: "3px" }} />
+                          <div style={{ width: `${row.pct}%`, height: "100%", backgroundColor: book.coverAccent, borderRadius: "3px" }} />
                         </div>
                         <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", width: "24px", textAlign: "right" }}>{row.pct}%</span>
                       </div>
@@ -556,7 +619,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
         >
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <span style={{ fontSize: "0.95rem", color: "var(--text-secondary)", fontWeight: "600" }}>Sanctuary Price:</span>
-            <span style={{ fontSize: "1.8rem", fontWeight: "800", fontFamily: "var(--font-title)", color: "var(--accent-primary)" }}>
+            <span style={{ fontSize: "1.8rem", fontWeight: "800", fontFamily: "var(--font-title)", color: book.coverAccent }}>
               ${book.price}
             </span>
           </div>
@@ -580,7 +643,13 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                 onClose();
               }}
               className="btn-primary"
-              style={{ padding: "0.75rem 2rem" }}
+              style={{
+                padding: "0.75rem 2rem",
+                background: `linear-gradient(135deg, ${book.coverAccent}, ${book.coverAccent}d9)`,
+                color: "#ffffff",
+                border: "none",
+                boxShadow: `0 4px 15px ${book.glowColor || "rgba(0,0,0,0.2)"}`
+              }}
             >
               <ShoppingCart size={18} />
               <span>Acquire Volume</span>

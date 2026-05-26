@@ -21,22 +21,37 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
         perspective: "800px"
       }}
     >
+      {/* Hover Glow Aura */}
+      <div
+        className="card-glow"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(circle at 50% 35%, ${book.glowColor || book.coverAccent}14, transparent 70%)`,
+          opacity: 0,
+          transition: "opacity 0.4s ease",
+          pointerEvents: "none",
+          zIndex: 0
+        }}
+      />
+
       {/* Category Tag Header & Wishlist Button */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "1rem"
+          marginBottom: "1rem",
+          zIndex: 1
         }}
       >
         <span
           style={{
             fontSize: "0.7rem",
             textTransform: "uppercase",
-            letterSpacing: "0.8px",
-            fontWeight: "700",
-            color: "var(--text-muted)"
+            letterSpacing: "1.2px",
+            fontWeight: "800",
+            color: book.coverAccent
           }}
         >
           {book.category}
@@ -53,152 +68,164 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
             color: isWishlisted ? "var(--accent-secondary)" : "var(--text-muted)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            background: "none",
+            border: "none",
+            padding: 0
           }}
         >
           <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
         </motion.button>
       </div>
 
-      {/* Book Cover Container with hover effects */}
-      <motion.div
-        onClick={onOpen}
-        whileHover={{
-          rotateY: 12,
-          rotateX: -6,
-          scale: 1.03,
-          boxShadow: `0 15px 30px -5px ${book.glowColor || "rgba(0,0,0,0.4)"}`
-        }}
-        transition={{ type: "spring", stiffness: 150, damping: 15 }}
+      {/* 3D Physical Book Model Container */}
+      <div
         style={{
           position: "relative",
           width: "100%",
           height: "240px",
-          borderRadius: "6px",
-          background: book.image 
-            ? `linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%), url(${book.image}) center/cover no-repeat` 
-            : book.themeColor,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "1.25rem",
-          cursor: "pointer",
-          boxShadow: `0 10px 25px -5px ${book.glowColor || "rgba(0,0,0,0.3)"}`,
+          perspective: "1000px",
           marginBottom: "1.25rem",
-          overflow: "hidden",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
-          transformStyle: "preserve-3d"
+          zIndex: 1
         }}
       >
-        {/* Spine Shadow */}
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: "8px",
-            background: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.15) 100%)",
-            zIndex: 3
-          }}
-        />
-
-        {/* Abstract Geometry */}
-        {!book.image && (
-          <div
-            style={{
-              position: "absolute",
-              top: "15%",
-              right: "-15%",
-              width: "120px",
-              height: "120px",
-              borderRadius: "50%",
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${book.coverAccent}33`,
-              zIndex: 1,
-              pointerEvents: "none"
-            }}
-          />
-        )}
-
-        {!book.image && (
-          <>
-            <div style={{ zIndex: 2 }}>
-              <div
-                style={{
-                  height: "2.5px",
-                  width: "25px",
-                  backgroundColor: book.coverAccent,
-                  marginBottom: "0.5rem"
-                }}
-              />
-              <h4
-                className="font-serif"
-                style={{
-                  color: "#ffffff",
-                  fontSize: "1.1rem",
-                  fontWeight: "700",
-                  lineHeight: "1.2",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.4)"
-                }}
-              >
-                {book.title}
-              </h4>
-            </div>
-
-            <p
-              style={{
-                color: "#e2e8f0",
-                fontSize: "0.8rem",
-                fontWeight: "500",
-                zIndex: 2,
-                textShadow: "0 1px 2px rgba(0,0,0,0.4)"
-              }}
-            >
-              {book.author}
-            </p>
-          </>
-        )}
-
-        {/* Quick View Button Hover Overlay */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 1 }}
+          onClick={onOpen}
+          whileHover={{
+            rotateY: 22,
+            rotateX: 6,
+            scale: 1.04,
+            boxShadow: `0 20px 35px -8px ${book.glowColor || "rgba(0,0,0,0.4)"}`
+          }}
+          transition={{ type: "spring", stiffness: 120, damping: 15 }}
           style={{
             position: "absolute",
             inset: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            backdropFilter: "blur(2px)",
-            zIndex: 4,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "0.5rem",
-            transition: "opacity 0.25s ease"
+            cursor: "pointer",
+            transformStyle: "preserve-3d",
+            transition: "box-shadow 0.3s ease",
+            boxShadow: `0 10px 20px -5px ${book.glowColor || "rgba(0,0,0,0.25)"}`,
+            borderRadius: "4px 8px 8px 4px"
           }}
         >
-          <span
+          {/* Front Cover Layer */}
+          <div
             style={{
-              background: "#ffffff",
-              color: "#0f172a",
-              padding: "0.5rem 1rem",
-              borderRadius: "20px",
-              fontSize: "0.8rem",
-              fontWeight: "600",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.25)"
+              position: "absolute",
+              inset: 0,
+              background: book.image 
+                ? `linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%), url(${book.image}) center/cover no-repeat` 
+                : book.themeColor,
+              borderRadius: "4px 8px 8px 4px",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              transform: "translateZ(8px)",
+              zIndex: 5
             }}
           >
-            <Eye size={14} />
-            Quick View
-          </span>
+            {/* Spine Shadow on Front Cover */}
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: "10px",
+                background: "linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.15) 100%)",
+                zIndex: 6
+              }}
+            />
+            
+            {/* Cover Title/Author for abstract covers */}
+            {!book.image && (
+              <div style={{ padding: "1.25rem", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div>
+                  <div style={{ height: "2.5px", width: "25px", backgroundColor: book.coverAccent, marginBottom: "0.5rem" }} />
+                  <h4 className="font-serif" style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: "700", lineHeight: "1.2" }}>{book.title}</h4>
+                </div>
+                <p style={{ color: "#e2e8f0", fontSize: "0.8rem", fontWeight: "500" }}>{book.author}</p>
+              </div>
+            )}
+          </div>
+
+          {/* 3D Pages Stack (Right Edge depth) */}
+          <div
+            style={{
+              position: "absolute",
+              top: "2px",
+              bottom: "2px",
+              right: "0",
+              width: "16px",
+              backgroundColor: "var(--bg-secondary)",
+              border: "1px solid var(--border-color)",
+              backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+              transform: "rotateY(90deg) translateZ(8px)",
+              transformOrigin: "right center",
+              borderRadius: "0 3px 3px 0",
+              zIndex: 4
+            }}
+          />
+
+          {/* 3D Bottom Pages (Bottom depth) */}
+          <div
+            style={{
+              position: "absolute",
+              left: "2px",
+              right: "2px",
+              bottom: "0",
+              height: "16px",
+              backgroundColor: "var(--bg-secondary)",
+              border: "1px solid var(--border-color)",
+              backgroundImage: "repeating-linear-gradient(to right, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+              transform: "rotateX(90deg) translateZ(8px)",
+              transformOrigin: "center bottom",
+              borderRadius: "0 0 3px 3px",
+              zIndex: 4
+            }}
+          />
+
+          {/* Quick View Button Hover Overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileHover={{ opacity: 1 }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.55)",
+              backdropFilter: "blur(2.5px)",
+              zIndex: 7, // above front cover layer
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "4px 8px 8px 4px",
+              transform: "translateZ(9px)",
+              transition: "opacity 0.25s ease"
+            }}
+          >
+            <span
+              style={{
+                background: "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(4px)",
+                color: "#0f172a",
+                padding: "0.6rem 1.2rem",
+                borderRadius: "40px",
+                fontSize: "0.8rem",
+                fontWeight: "700",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
+                border: "1px solid rgba(255,255,255,0.4)"
+              }}
+            >
+              <Eye size={14} />
+              Quick View
+            </span>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Book Metadata */}
-      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", zIndex: 1 }}>
         <div>
           <h3
             style={{
@@ -223,8 +250,8 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
 
           {/* Rating */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.75rem" }}>
-            <div className="rating-stars">
-              <Star size={13} fill="currentColor" />
+            <div style={{ display: "flex", alignItems: "center", color: "#eab308" }}>
+              <Star size={13} fill="currentColor" stroke="currentColor" />
             </div>
             <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "var(--text-primary)" }}>{book.rating}</span>
             <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>({book.reviewsCount})</span>
@@ -237,11 +264,13 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
                 key={tag}
                 style={{
                   fontSize: "0.7rem",
-                  padding: "0.2rem 0.5rem",
-                  backgroundColor: "var(--bg-tertiary)",
-                  color: "var(--text-secondary)",
-                  borderRadius: "4px",
-                  fontWeight: "500"
+                  padding: "0.25rem 0.6rem",
+                  backgroundColor: `${book.coverAccent}12`,
+                  color: book.coverAccent,
+                  border: `1px solid ${book.coverAccent}22`,
+                  borderRadius: "6px",
+                  fontWeight: "600",
+                  letterSpacing: "0.2px"
                 }}
               >
                 #{tag}
@@ -265,7 +294,7 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
             style={{
               fontSize: "1.2rem",
               fontWeight: "800",
-              color: "var(--accent-primary)",
+              color: book.coverAccent,
               fontFamily: "var(--font-title)"
             }}
           >
@@ -280,9 +309,13 @@ export default function BookCard({ book, onOpen, onAddToCart, onToggleWishlist, 
             }}
             className="btn-primary"
             style={{
-              padding: "0.45rem 1rem",
+              padding: "0.5rem 1.2rem",
               fontSize: "0.8rem",
-              borderRadius: "8px"
+              borderRadius: "20px",
+              background: `linear-gradient(135deg, ${book.coverAccent}, ${book.coverAccent}d9)`,
+              color: "#ffffff",
+              border: "none",
+              boxShadow: `0 4px 12px ${book.glowColor || "rgba(0,0,0,0.2)"}`
             }}
           >
             <ShoppingCart size={14} />
