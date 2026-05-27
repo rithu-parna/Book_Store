@@ -94,86 +94,98 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Primary Action Links */}
-        <div className="sidebar-links-section">
-          <span className="sidebar-section-title">Navigation</span>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-            <button
-              onClick={() => {
-                setActiveCategory("All Collections");
-                // Scroll to top of catalog
-                window.scrollTo({ top: 500, behavior: "smooth" });
-              }}
-              className="sidebar-link active-hover"
-              style={{
-                backgroundColor: activeCategory === "All Collections" ? "var(--sidebar-active-bg)" : "transparent",
-                color: activeCategory === "All Collections" ? "var(--sidebar-active-text)" : "var(--text-primary)"
-              }}
-            >
-              <LayoutGrid size={16} />
-              <span>Explore Catalog</span>
-            </button>
+        {/* Scrollable middle container to prevent sidebar footer from getting pushed off-screen */}
+        <div 
+          className="hide-scrollbar" 
+          style={{ 
+            flexGrow: 1, 
+            overflowY: "auto", 
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem"
+          }}
+        >
+          {/* Primary Action Links */}
+          <div className="sidebar-links-section" style={{ marginBottom: 0 }}>
+            <span className="sidebar-section-title">Navigation</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+              <button
+                onClick={() => {
+                  setActiveCategory("All Collections");
+                  // Scroll to top of catalog
+                  window.scrollTo({ top: 500, behavior: "smooth" });
+                }}
+                className="sidebar-link active-hover"
+                style={{
+                  backgroundColor: activeCategory === "All Collections" ? "var(--sidebar-active-bg)" : "transparent",
+                  color: activeCategory === "All Collections" ? "var(--sidebar-active-text)" : "var(--text-primary)"
+                }}
+              >
+                <LayoutGrid size={16} />
+                <span>Explore Catalog</span>
+              </button>
 
-            <button
-              onClick={onScrollToQuiz}
-              className="sidebar-link active-hover"
-            >
-              <Sparkles size={16} className="spin-slow" style={{ color: "var(--accent-secondary)" }} />
-              <span>Book Matcher</span>
-            </button>
+              <button
+                onClick={onScrollToQuiz}
+                className="sidebar-link active-hover"
+              >
+                <Sparkles size={16} className="spin-slow" style={{ color: "var(--accent-secondary)" }} />
+                <span>Book Matcher</span>
+              </button>
 
-            <button
-              onClick={onOpenWishlist}
-              className="sidebar-link active-hover"
-              style={{
-                color: wishlistCount > 0 ? "var(--accent-secondary)" : "var(--text-primary)"
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexGrow: 1 }}>
-                <Heart size={16} fill={wishlistCount > 0 ? "currentColor" : "none"} />
-                <span>My Wishlist</span>
-              </div>
-              {wishlistCount > 0 && <span className="badge" style={{ transform: "scale(0.85)" }}>{wishlistCount}</span>}
-            </button>
+              <button
+                onClick={onOpenWishlist}
+                className="sidebar-link active-hover"
+                style={{
+                  color: wishlistCount > 0 ? "var(--accent-secondary)" : "var(--text-primary)"
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexGrow: 1 }}>
+                  <Heart size={16} fill={wishlistCount > 0 ? "currentColor" : "none"} />
+                  <span>My Wishlist</span>
+                </div>
+                {wishlistCount > 0 && <span className="badge" style={{ transform: "scale(0.85)" }}>{wishlistCount}</span>}
+              </button>
 
-            <button
-              onClick={onOpenCart}
-              className="sidebar-link active-hover"
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexGrow: 1 }}>
-                <ShoppingBag size={16} />
-                <span>Acquisition Cart</span>
-              </div>
-              {cartCount > 0 && <span className="badge" style={{ transform: "scale(0.85)" }}>{cartCount}</span>}
-            </button>
+              <button
+                onClick={onOpenCart}
+                className="sidebar-link active-hover"
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexGrow: 1 }}>
+                  <ShoppingBag size={16} />
+                  <span>Acquisition Cart</span>
+                </div>
+                {cartCount > 0 && <span className="badge" style={{ transform: "scale(0.85)" }}>{cartCount}</span>}
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Collections Dropdown Filter */}
-        <div className="sidebar-links-section" style={{ flexGrow: 1 }}>
-          <span className="sidebar-section-title">Collections</span>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-            {categories.map((cat) => {
-              const isSelected = activeCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setActiveCategory(cat);
-                  }}
-                  className="sidebar-category-link"
-                  style={{
-                    backgroundColor: isSelected ? "var(--sidebar-active-bg)" : "transparent",
-                    color: isSelected ? "var(--sidebar-active-text)" : "var(--text-secondary)",
-                    fontWeight: isSelected ? "700" : "500",
-                    borderLeft: isSelected ? "3px solid var(--accent-primary)" : "3px solid transparent",
-                    paddingLeft: isSelected ? "0.6rem" : "0.75rem"
-                  }}
-                >
-                  {cat}
-                </button>
-              );
-            })}
+          {/* Collections Dropdown Filter */}
+          <div className="sidebar-links-section" style={{ marginBottom: 0 }}>
+            <span className="sidebar-section-title">Collections</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+              {categories.map((cat) => {
+                const isSelected = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                    }}
+                    className="sidebar-category-link"
+                    style={{
+                      backgroundColor: isSelected ? "var(--sidebar-active-bg)" : "transparent",
+                      color: isSelected ? "var(--sidebar-active-text)" : "var(--text-secondary)",
+                      fontWeight: isSelected ? "700" : "500",
+                      borderLeft: isSelected ? "3px solid var(--accent-primary)" : "3px solid transparent",
+                      paddingLeft: isSelected ? "0.6rem" : "0.75rem"
+                    }}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 

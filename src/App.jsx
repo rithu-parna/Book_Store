@@ -172,9 +172,7 @@ export default function App() {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              flexWrap: "wrap",
+              flexDirection: "column",
               gap: "1.5rem",
               marginBottom: "2rem",
               borderBottom: "1px solid var(--border-color)",
@@ -193,42 +191,69 @@ export default function App() {
               </h2>
             </div>
 
-            {/* Quick Collections Toggles */}
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setActiveCategory(cat);
-                    setIsFilterWishlistOnly(false);
-                  }}
-                  className={activeCategory === cat && !isFilterWishlistOnly ? "btn-primary" : "btn-secondary"}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    fontSize: "0.85rem",
-                    borderRadius: "20px"
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
-              {wishlistItems.length > 0 && (
-                <button
-                  onClick={handleOpenWishlistFilter}
-                  className={isFilterWishlistOnly ? "btn-primary" : "btn-secondary"}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    fontSize: "0.85rem",
-                    borderRadius: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.4rem"
-                  }}
-                >
-                  <Heart size={14} fill={isFilterWishlistOnly ? "currentColor" : "none"} style={{ color: isFilterWishlistOnly ? "#fff" : "var(--accent-secondary)" }} />
-                  <span>Wishlisted ({wishlistItems.length})</span>
-                </button>
-              )}
+            {/* Quick Collections Toggles in a smooth horizontal scrollbar-hidden container */}
+            <div style={{ position: "relative", width: "100%" }}>
+              <div 
+                className="hide-scrollbar"
+                style={{ 
+                  display: "flex", 
+                  gap: "0.6rem", 
+                  overflowX: "auto", 
+                  flexWrap: "nowrap",
+                  padding: "0.2rem 0",
+                  WebkitOverflowScrolling: "touch"
+                }}
+              >
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setIsFilterWishlistOnly(false);
+                    }}
+                    className={activeCategory === cat && !isFilterWishlistOnly ? "btn-primary" : "btn-secondary"}
+                    style={{
+                      padding: "0.5rem 1.25rem",
+                      fontSize: "0.85rem",
+                      borderRadius: "20px",
+                      flexShrink: 0
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+                {wishlistItems.length > 0 && (
+                  <button
+                    onClick={handleOpenWishlistFilter}
+                    className={isFilterWishlistOnly ? "btn-primary" : "btn-secondary"}
+                    style={{
+                      padding: "0.5rem 1.25rem",
+                      fontSize: "0.85rem",
+                      borderRadius: "20px",
+                      flexShrink: 0,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.4rem"
+                    }}
+                  >
+                    <Heart size={14} fill={isFilterWishlistOnly ? "currentColor" : "none"} style={{ color: isFilterWishlistOnly ? "#fff" : "var(--accent-secondary)" }} />
+                    <span>Wishlisted ({wishlistItems.length})</span>
+                  </button>
+                )}
+              </div>
+              {/* Subtle fade overlay at the right edge indicating scrollable items */}
+              <div 
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: "50px",
+                  background: "linear-gradient(to right, transparent, var(--bg-primary))",
+                  pointerEvents: "none",
+                  zIndex: 2
+                }}
+              />
             </div>
           </div>
 
