@@ -56,13 +56,3 @@ Ensure you have **Node.js** (v18.0.0 or higher) and **npm** installed on your ma
    npm run build
    ```
 
----
-
-## ☁️ Vercel Deployment
-
-When deploying this project to **Vercel**, ensure the following configurations are set in the Vercel dashboard:
-
-- **Framework Preset**: `Vite`
-- **Build Command**: `npm run build` *(Do **not** use `npm run dev` as the build command, as it will run indefinitely and cause the deployment to hang.)*
-- **Output Directory**: `dist`
-- **Install Command**: `npm install`
