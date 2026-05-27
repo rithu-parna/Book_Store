@@ -21,14 +21,11 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterWishlistOnly, setIsFilterWishlistOnly] = useState(false);
 
-  // Selected Book for Modal
   const [selectedBook, setSelectedBook] = useState(null);
   const [hoveredBook, setHoveredBook] = useState(null);
 
-  // Toast Notifications State
   const [toasts, setToasts] = useState([]);
 
-  // Apply Theme class to document root
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") {

@@ -4,7 +4,10 @@ export const categories = [
   "Sci-Fi & Cyberpunk",
   "Philosophy & Deep Thoughts",
   "Art, Design & Poetry",
-  "Rare & Collectibles"
+  "Rare & Collectibles",
+  "History & Biographies",
+  "Mystery & Suspense",
+  "Fantasy & Mythology"
 ];
 
 export const booksData = [
@@ -423,6 +426,84 @@ export const booksData = [
     ],
     audioNarrator: "Donald Sutherland",
     audioDuration: "6h 45m"
+  },
+  {
+    id: "b17",
+    title: "The Whispering Silhouette",
+    author: "Evelyn Thorne",
+    category: "Mystery & Suspense",
+    price: 16.99,
+    rating: 4.7,
+    reviewsCount: 184,
+    publishYear: 2025,
+    pages: 312,
+    tags: ["Noir", "Mystery", "Thriller"],
+    image: "/covers/whispering_silhouette.png",
+    themeColor: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #374151 100%)",
+    glowColor: "rgba(156, 163, 175, 0.4)",
+    coverAccent: "#9ca3af",
+    description: "An enigmatic investigator uncovers family secrets hidden in a decaying coastal estate during the wet winter of 1954.",
+    synopsis: "When private investigator Arthur Vance is hired to find a missing heiress, his only clue is a series of silent, empty rooms and a collection of audio diaries that speak in riddles. As he delves deeper into the coastal manor, he discovers a web of family secrets, forged identities, and a silhouette that seems to watch him from the fog.",
+    samplePages: [
+      "The fog had crept up from the harbour by early evening, wrapping the stone facade of Blackwood Manor in a damp, grey shroud. I pulled my coat tighter. Underneath the streetlamp, my shadow looked twice as long.",
+      "The door was opened by an old butler whose face was as creased as a forgotten map. 'The family has been expecting you, Mr. Vance,' he said, his voice flat. 'But I must warn you, the mistress does not like to be disturbed after dark.'",
+      "In the library, a log fire sputtered, casting orange claws against the leather spines. On the desk lay the first recorder. I pressed play. A woman's voice, raspy and nervous: 'If you're hearing this, he has found the cellar.'",
+      "I walked toward the window. There, standing at the edge of the cliffs, was a figure. They didn't move, just stared back at the house through the driving rain. When I blinked, the space was empty."
+    ],
+    audioNarrator: "Edward Harrison",
+    audioDuration: "9h 30m"
+  },
+  {
+    id: "b18",
+    title: "Dawn of the Renaissance",
+    author: "Dr. Matteo Rossi",
+    category: "History & Biographies",
+    price: 34.99,
+    rating: 4.8,
+    reviewsCount: 96,
+    publishYear: 2024,
+    pages: 520,
+    tags: ["History", "Art", "Italy"],
+    image: "/covers/dawn_renaissance.png",
+    themeColor: "linear-gradient(135deg, #451a03 0%, #3c1e08 50%, #1c0d02 100%)",
+    glowColor: "rgba(251, 191, 36, 0.4)",
+    coverAccent: "#fbbf24",
+    description: "A beautifully illustrated account of Florence’s explosive intellectual and artistic awakening under the Medici family.",
+    synopsis: "Dr. Rossi details the social, economic, and artistic currents that transformed Florence from a medieval guild town into the beacon of the Western Renaissance. Featuring rich deep dives into the workshops of Donatello, Brunelleschi, and Da Vinci.",
+    samplePages: [
+      "Florence in the spring of 1420 was a city of scaffolding. The Cathedral of Santa Maria del Fiore stood open to the sky, its great octagonal drum waiting for a dome that many believed was impossible to build.",
+      "Filippo Brunelleschi walked the narrow lanes with a wooden model under his arm. He spoke of perspective as if it were a branch of theology, explaining how parallel lines must meet at a single, vanishing point of human sight.",
+      "In the workshops of the shadow guild, patrons argued over the cost of ultramarine pigment. The dye, imported from the mines of Badakhshan, was worth more than its weight in gold. To paint a Madonna's cloak was a political statement.",
+      "The Medici bank kept its ledgers in a secret script. In the margins of interest rates and exchange fees, Cosimo wrote of books—classical manuscripts recovered from monasteries in Switzerland and Germany."
+    ],
+    audioNarrator: "Gianni Capaldi",
+    audioDuration: "16h 20m"
+  },
+  {
+    id: "b19",
+    title: "Echoes of the World Tree",
+    author: "Freya Lindqvist",
+    category: "Fantasy & Mythology",
+    price: 22.99,
+    rating: 4.9,
+    reviewsCount: 215,
+    publishYear: 2026,
+    pages: 480,
+    tags: ["Mythology", "Fantasy", "Norse"],
+    image: "/covers/world_tree.png",
+    themeColor: "linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%)",
+    glowColor: "rgba(52, 211, 153, 0.4)",
+    coverAccent: "#34d399",
+    description: "A lyrical retelling of forgotten Norse sagas through the eyes of the last valkyrie.",
+    synopsis: "As the gods fade into memory, the last valkyrie embarks on a journey across the roots of Yggdrasil to gather the fragments of the shattered sun before the eternal winter takes hold of Midgard.",
+    samplePages: [
+      "The ash tree Yggdrasil was weeping. Great drops of sap fell from the sky, freezing as they hit the grey stone of Midgard. The gods were gone, or silent, leaving only the frost giants to walk the valleys.",
+      "Freya adjusted her silver mail-shirt. Her wings, once white as mountain snow, were now the color of wet slate. She carried only a broken spear and a leather bag containing three golden apples.",
+      "She met the Norns at the well of Urðr. The water was frozen solid, its surface a mirror showing a sky without stars. 'The roots are rotting, Valkyrie,' the oldest sister whispered, her fingers spinning grey thread.",
+      "She began her descent into Niflheim. The wind there smelled of old ice and iron. With each step, the whispers of the dead rose from the frost, asking if the halls of Valhalla still stood warm."
+    ],
+    audioNarrator: "Aria Sterling",
+    audioDuration: "14h 10m"
   }
 ];
 
