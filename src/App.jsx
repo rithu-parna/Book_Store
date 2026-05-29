@@ -159,6 +159,9 @@ export default function App() {
         }
         return targetState;
       });
+      setTimeout(() => {
+        document.getElementById("catalog-section")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }, "Please sign in to view your wishlist.");
   };
 
@@ -208,7 +211,7 @@ export default function App() {
         <HeroSlider books={booksData} onOpenBook={setSelectedBook} theme={theme} />
 
         {/* Catalog Section Header */}
-        <div style={{ maxWidth: "1200px", margin: "4rem auto 0 auto", padding: "0 2rem" }}>
+        <div id="catalog-section" style={{ maxWidth: "1200px", margin: "4rem auto 0 auto", padding: "0 2rem" }}>
           <div
             style={{
               display: "flex",

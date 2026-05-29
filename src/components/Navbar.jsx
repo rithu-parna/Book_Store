@@ -378,6 +378,9 @@ export default function Navbar({
           onClick={() => {
             setActiveCategory("All Collections");
             setShowMobileCategories(false);
+            setTimeout(() => {
+              document.getElementById("catalog-section")?.scrollIntoView({ behavior: "smooth" });
+            }, 100);
           }}
           className="mobile-nav-btn"
           style={{ color: activeCategory === "All Collections" && !showMobileCategories ? "var(--accent-primary)" : "var(--text-secondary)" }}
@@ -502,6 +505,9 @@ export default function Navbar({
                     onClick={() => {
                       setActiveCategory(cat);
                       setShowMobileCategories(false);
+                      setTimeout(() => {
+                        document.getElementById("catalog-section")?.scrollIntoView({ behavior: "smooth" });
+                      }, 100);
                     }}
                     style={{
                       width: "100%",
