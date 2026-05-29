@@ -8,6 +8,7 @@ import CartDrawer from "./components/CartDrawer";
 import GlobalBg from "./components/GlobalBg";
 import { booksData, categories } from "./data/books";
 import { motion, AnimatePresence } from "framer-motion";
+import AdvancedDropdown from "./components/AdvancedDropdown";
 import { Sparkles, Heart, Library, Compass, HelpCircle, ChevronDown, Folder } from "lucide-react";
 
 export default function App() {
@@ -20,7 +21,6 @@ export default function App() {
   const [activeCategory, setActiveCategory] = useState("All Collections");
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterWishlistOnly, setIsFilterWishlistOnly] = useState(false);
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   const [selectedBook, setSelectedBook] = useState(null);
   const [hoveredBook, setHoveredBook] = useState(null);
@@ -234,85 +234,17 @@ export default function App() {
                 )}
               </div>
 
-              {/* Mobile view: Expandable dropdown styled like the desktop sidebar model */}
+              {/* Mobile view: Advanced Dropdown Selector */}
               <div className="mobile-collections-dropdown">
-                <button
-                  onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
-                  className="dropdown-trigger-btn glass"
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Folder size={16} style={{ color: "var(--accent-primary)" }} />
-                    <span>
-                      {isFilterWishlistOnly 
-                        ? `Wishlisted (${wishlistItems.length})` 
-                        : activeCategory}
-                    </span>
-                  </div>
-                  <ChevronDown 
-                    size={16} 
-                    style={{ 
-                      transform: isCategoryDropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.3s ease" 
-                    }} 
-                  />
-                </button>
-
-                <AnimatePresence>
-                  {isCategoryDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="dropdown-menu-list glass"
-                    >
-                      {categories.map((cat) => {
-                        const isSelected = activeCategory === cat && !isFilterWishlistOnly;
-                        return (
-                          <button
-                            key={cat}
-                            onClick={() => {
-                              setActiveCategory(cat);
-                              setIsFilterWishlistOnly(false);
-                              setIsCategoryDropdownOpen(false);
-                            }}
-                            className="mobile-category-link"
-                            style={{
-                              backgroundColor: isSelected ? "var(--sidebar-active-bg)" : "transparent",
-                              color: isSelected ? "var(--sidebar-active-text)" : "var(--text-secondary)",
-                              fontWeight: isSelected ? "700" : "500",
-                              borderLeft: isSelected ? "3px solid var(--accent-primary)" : "3px solid transparent",
-                              paddingLeft: isSelected ? "0.6rem" : "0.75rem"
-                            }}
-                          >
-                            {cat}
-                          </button>
-                        );
-                      })}
-                      {wishlistItems.length > 0 && (
-                        <button
-                          onClick={() => {
-                            handleOpenWishlistFilter();
-                            setIsCategoryDropdownOpen(false);
-                          }}
-                          className="mobile-category-link"
-                          style={{
-                            backgroundColor: isFilterWishlistOnly ? "var(--sidebar-active-bg)" : "transparent",
-                            color: isFilterWishlistOnly ? "var(--sidebar-active-text)" : "var(--text-secondary)",
-                            fontWeight: isFilterWishlistOnly ? "700" : "500",
-                            borderLeft: isFilterWishlistOnly ? "3px solid var(--accent-primary)" : "3px solid transparent",
-                            paddingLeft: isFilterWishlistOnly ? "0.6rem" : "0.75rem",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem"
-                          }}
-                        >
-                          <Heart size={14} fill={isFilterWishlistOnly ? "currentColor" : "none"} style={{ color: isFilterWishlistOnly ? "#fff" : "var(--accent-secondary)" }} />
-                          <span>Wishlisted ({wishlistItems.length})</span>
-                        </button>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <AdvancedDropdown
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  setActiveCategory={setActiveCategory}
+                  isFilterWishlistOnly={isFilterWishlistOnly}
+                  setIsFilterWishlistOnly={setIsFilterWishlistOnly}
+                  wishlistItems={wishlistItems}
+                  booksData={booksData}
+                />
               </div>
             </div>
           </div>
