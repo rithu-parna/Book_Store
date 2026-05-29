@@ -186,7 +186,7 @@ export default function App() {
                   {isFilterWishlistOnly ? "My Wishlist" : activeCategory}
                 </span>
               </div>
-              <h2 className="font-serif" style={{ fontSize: "2.4rem", fontWeight: "800" }}>
+              <h2 className="font-serif catalog-title" style={{ fontSize: "2.4rem", fontWeight: "800" }}>
                 {isFilterWishlistOnly ? "Reserved Sanctuary Volumes" : "Explore Our Collections"}
               </h2>
             </div>
@@ -274,7 +274,7 @@ export default function App() {
                 }}
               >
                 <Compass size={40} style={{ color: "var(--text-muted)", strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: "1.2rem", fontWeight: "700" }}>No matching archives located</h3>
+                <h3 className="no-results-title" style={{ fontSize: "1.2rem", fontWeight: "700" }}>No matching archives located</h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", maxWidth: "340px" }}>
                   Adjust your search parameters or check our other Collections sections.
                 </p>
@@ -336,10 +336,10 @@ export default function App() {
           alignItems: "center"
         }}
       >
-        <span className="font-serif" style={{ fontSize: "1.2rem", fontWeight: "700", color: "var(--text-primary)" }}>
+        <span className="font-serif footer-title" style={{ fontSize: "1.2rem", fontWeight: "700", color: "var(--text-primary)" }}>
           Lumina Books • Sanctuary of Letters
         </span>
-        <p style={{ maxWidth: "420px", margin: "0 auto", lineHeight: "1.6" }}>
+        <p className="footer-desc" style={{ maxWidth: "420px", margin: "0 auto", lineHeight: "1.6" }}>
           A highly premium digital catalog celebrating independent authors, philosophical inquiries, futuristic visions, and rare historical prints.
         </p>
         <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "1rem" }}>

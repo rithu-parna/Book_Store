@@ -638,6 +638,111 @@ textarea {
     align-items: center !important;
     gap: 0.4rem !important;
   }
+
+  /* Mobile Responsive Typography Adjustments */
+  
+  /* App / Catalog */
+  .catalog-title {
+    font-size: 1.6rem !important;
+  }
+  .no-results-title {
+    font-size: 1.05rem !important;
+  }
+  .footer-title {
+    font-size: 1.1rem !important;
+  }
+  .footer-desc {
+    font-size: 0.8rem !important;
+  }
+
+  /* Hero Slider */
+  .hero-slide-price {
+    font-size: 1.2rem !important;
+    margin-left: 0.5rem !important;
+  }
+
+  /* BookCard */
+  .card-title {
+    font-size: 0.9rem !important;
+  }
+  .card-author {
+    font-size: 0.75rem !important;
+  }
+  .card-price {
+    font-size: 1.0rem !important;
+  }
+
+  /* BookDetailModal */
+  .modal-title {
+    font-size: 1.4rem !important;
+  }
+  .modal-author {
+    font-size: 0.9rem !important;
+  }
+  .modal-stat-value {
+    font-size: 0.8rem !important;
+  }
+  .modal-section-title {
+    font-size: 0.95rem !important;
+  }
+  .modal-synopsis {
+    font-size: 0.85rem !important;
+  }
+  .audio-title {
+    font-size: 0.95rem !important;
+  }
+  .audio-narrator {
+    font-size: 0.8rem !important;
+  }
+  .audio-duration {
+    font-size: 0.75rem !important;
+  }
+  .reviews-rating {
+    font-size: 2rem !important;
+  }
+  .modal-price {
+    font-size: 1.3rem !important;
+  }
+  
+  /* BookMatcher */
+  .matcher-title {
+    font-size: 1.5rem !important;
+  }
+  .matcher-desc {
+    font-size: 0.85rem !important;
+  }
+  .matcher-question {
+    font-size: 1.1rem !important;
+  }
+  .matcher-computing-title {
+    font-size: 1.1rem !important;
+  }
+  .matcher-result-title {
+    font-size: 1.4rem !important;
+  }
+  .matcher-result-book-title {
+    font-size: 1.0rem !important;
+  }
+  .matcher-result-book-price {
+    font-size: 1.1rem !important;
+  }
+
+  /* CartDrawer */
+  .cart-drawer-title {
+    font-size: 1.1rem !important;
+  }
+  .cart-item-title {
+    font-size: 0.8rem !important;
+  }
+  .cart-checkout-title {
+    font-size: 1.0rem !important;
+  }
+  .cart-success-title {
+    font-size: 1.1rem !important;
+  }
+  .cart-total-row {
+    font-size: 1.0rem !important;
+  }
 }
 
 /* Hide scrollbar utility */

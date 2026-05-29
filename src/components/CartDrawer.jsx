@@ -98,7 +98,7 @@ export default function CartDrawer({
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <ShoppingCart size={20} style={{ color: "var(--accent-primary)" }} />
-                <h3 className="font-serif" style={{ fontSize: "1.25rem", fontWeight: "700" }}>Your Cart</h3>
+                <h3 className="font-serif cart-drawer-title" style={{ fontSize: "1.25rem", fontWeight: "700" }}>Your Cart</h3>
                 <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "bold" }}>
                   ({cartItems.length} items)
                 </span>
@@ -179,7 +179,7 @@ export default function CartDrawer({
 
                           {/* Info Column */}
                           <div style={{ flexGrow: 1, minWidth: 0 }}>
-                            <h4 style={{ fontSize: "0.9rem", fontWeight: "700", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                            <h4 className="cart-item-title" style={{ fontSize: "0.9rem", fontWeight: "700", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                               {item.title}
                             </h4>
                             <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginBottom: "0.4rem" }}>
@@ -254,7 +254,7 @@ export default function CartDrawer({
                     <Loader size={48} />
                   </motion.div>
                   <div>
-                    <h4 style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "0.5rem" }}>
+                    <h4 className="cart-checkout-title" style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "0.5rem" }}>
                       Processing Secured Transaction...
                     </h4>
                     <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
@@ -280,7 +280,7 @@ export default function CartDrawer({
                     <Check size={48} />
                   </motion.div>
                   <div>
-                    <h4 className="font-serif" style={{ fontSize: "1.3rem", fontWeight: "800", marginBottom: "0.5rem" }}>
+                    <h4 className="font-serif cart-success-title" style={{ fontSize: "1.3rem", fontWeight: "800", marginBottom: "0.5rem" }}>
                       Volumes Cleared!
                     </h4>
                     <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", maxWidth: "260px", margin: "0 auto" }}>
@@ -358,7 +358,7 @@ export default function CartDrawer({
                     <span>Shipping Manifest</span>
                     <span style={{ color: "#10b981", fontWeight: "bold" }}>FREE</span>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "1.15rem", fontWeight: "800", color: "var(--text-primary)", borderTop: "1px solid var(--border-color)", paddingTop: "0.5rem", marginTop: "0.25rem" }}>
+                  <div className="cart-total-row" style={{ display: "flex", justifyContent: "space-between", fontSize: "1.15rem", fontWeight: "800", color: "var(--text-primary)", borderTop: "1px solid var(--border-color)", paddingTop: "0.5rem", marginTop: "0.25rem" }}>
                     <span>Acquisition Total</span>
                     <span>${total.toFixed(2)}</span>
                   </div>

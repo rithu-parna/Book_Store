@@ -327,6 +327,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                   <span>Reveal Book Details</span>
                 </button>
                 <span
+                  className="hero-slide-price"
                   style={{
                     fontSize: "1.6rem",
                     fontWeight: "800",

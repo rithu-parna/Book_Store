@@ -125,10 +125,10 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
             </div>
 
             <div>
-              <h2 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: "800", marginBottom: "0.5rem" }}>
+              <h2 className="font-serif matcher-title" style={{ fontSize: "2.2rem", fontWeight: "800", marginBottom: "0.5rem" }}>
                 Discover Your Next Literary Alignment
               </h2>
-              <p style={{ color: "var(--text-secondary)", maxWidth: "560px", margin: "0 auto", fontSize: "1.05rem" }}>
+              <p className="matcher-desc" style={{ color: "var(--text-secondary)", maxWidth: "560px", margin: "0 auto", fontSize: "1.05rem" }}>
                 Tell our algorithmic match-finder about your current mood, attention frequency, and sensory tastes, and we will pair you with the perfect book.
               </p>
             </div>
@@ -151,7 +151,7 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
             <span style={{ fontSize: "0.8rem", color: "var(--accent-primary)", fontWeight: "800", letterSpacing: "1.5px", textTransform: "uppercase" }}>
               PROTOCOL SEQUENCE 01 / 03
             </span>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "700" }}>
+            <h3 className="matcher-question" style={{ fontSize: "1.5rem", fontWeight: "700" }}>
               What kind of environment feels enticing right now?
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }} className="quiz-grid">
@@ -193,7 +193,7 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
             <span style={{ fontSize: "0.8rem", color: "var(--accent-primary)", fontWeight: "800", letterSpacing: "1.5px", textTransform: "uppercase" }}>
               PROTOCOL SEQUENCE 02 / 03
             </span>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "700" }}>
+            <h3 className="matcher-question" style={{ fontSize: "1.5rem", fontWeight: "700" }}>
               Choose your preferred depth and pages capacity:
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -237,7 +237,7 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
             <span style={{ fontSize: "0.8rem", color: "var(--accent-primary)", fontWeight: "800", letterSpacing: "1.5px", textTransform: "uppercase" }}>
               PROTOCOL SEQUENCE 03 / 03
             </span>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "700" }}>
+            <h3 className="matcher-question" style={{ fontSize: "1.5rem", fontWeight: "700" }}>
               Select a visual energy state that aligns with you:
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }} className="quiz-grid">
@@ -306,7 +306,7 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
             </div>
 
             <div>
-              <h3 style={{ fontSize: "1.4rem", fontWeight: "700", marginBottom: "0.5rem" }}>
+              <h3 className="matcher-computing-title" style={{ fontSize: "1.4rem", fontWeight: "700", marginBottom: "0.5rem" }}>
                 Computing Literary Synapses...
               </h3>
               <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
@@ -337,7 +337,7 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
               <div style={{ display: "flex", justifyContent: "center", gap: "0.25rem", color: "var(--accent-primary)", marginBottom: "0.5rem" }}>
                 <CheckCircle2 size={24} />
               </div>
-              <h3 className="font-serif" style={{ fontSize: "2rem", fontWeight: "800" }}>
+              <h3 className="font-serif matcher-result-title" style={{ fontSize: "2rem", fontWeight: "800" }}>
                 Your Literary Match Awaits
               </h3>
               <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginTop: "0.25rem" }}>
@@ -415,12 +415,12 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
                 <span style={{ fontSize: "0.75rem", fontWeight: "bold", color: "var(--accent-primary)", textTransform: "uppercase" }}>
                   {matchedBook.category}
                 </span>
-                <h4 style={{ fontSize: "1.2rem", fontWeight: "700" }}>{matchedBook.title}</h4>
+                <h4 className="matcher-result-book-title" style={{ fontSize: "1.2rem", fontWeight: "700" }}>{matchedBook.title}</h4>
                 <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
                   {matchedBook.description}
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "0.5rem" }}>
-                  <span style={{ fontSize: "1.3rem", fontWeight: "800", color: "var(--accent-primary)" }}>
+                  <span className="matcher-result-book-price" style={{ fontSize: "1.3rem", fontWeight: "800", color: "var(--accent-primary)" }}>
                     ${matchedBook.price}
                   </span>
                   <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>

@@ -256,7 +256,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
               {book.category}
             </span>
             <h2
-              className="font-serif"
+              className="font-serif modal-title"
               style={{
                 color: "#ffffff",
                 fontSize: "2.2rem",
@@ -268,7 +268,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
             >
               {book.title}
             </h2>
-            <p style={{ color: "#cbd5e1", fontSize: "1.1rem", fontWeight: "500" }}>
+            <p className="modal-author" style={{ color: "#cbd5e1", fontSize: "1.1rem", fontWeight: "500" }}>
               by <span style={{ color: "#ffffff", fontWeight: "600" }}>{book.author}</span>
             </p>
           </div>
@@ -342,7 +342,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                   >
                     <Calendar size={16} style={{ color: book.coverAccent }} />
                     <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: "600" }}>PUBLISHED</span>
-                    <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>{book.publishYear}</span>
+                    <span className="modal-stat-value" style={{ fontSize: "0.9rem", fontWeight: "700" }}>{book.publishYear}</span>
                   </div>
 
                   <div
@@ -361,7 +361,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                   >
                     <BookOpen size={16} style={{ color: book.coverAccent }} />
                     <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: "600" }}>PAGES</span>
-                    <span style={{ fontSize: "0.9rem", fontWeight: "700" }}>{book.pages} Pages</span>
+                    <span className="modal-stat-value" style={{ fontSize: "0.9rem", fontWeight: "700" }}>{book.pages} Pages</span>
                   </div>
 
                   <div
@@ -380,7 +380,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                   >
                     <Award size={16} style={{ color: book.coverAccent }} />
                     <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: "600" }}>RATING</span>
-                    <span style={{ fontSize: "0.9rem", fontWeight: "700", display: "flex", alignItems: "center", gap: "2px" }}>
+                    <span className="modal-stat-value" style={{ fontSize: "0.9rem", fontWeight: "700", display: "flex", alignItems: "center", gap: "2px" }}>
                       {book.rating} <Star size={12} fill="currentColor" style={{ color: "#eab308" }} />
                     </span>
                   </div>
@@ -388,13 +388,13 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
 
                 {/* Extended synopsis */}
                 <div>
-                  <h4 style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "0.75rem" }}>Synopsis</h4>
-                  <p style={{ color: "var(--text-secondary)", lineHeight: "1.8", fontSize: "0.95rem" }}>{book.synopsis}</p>
+                  <h4 className="modal-section-title" style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "0.75rem" }}>Synopsis</h4>
+                  <p className="modal-synopsis" style={{ color: "var(--text-secondary)", lineHeight: "1.8", fontSize: "0.95rem" }}>{book.synopsis}</p>
                 </div>
 
                 {/* Highlights / Tags list */}
                 <div>
-                  <h4 style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "0.75rem" }}>Subject Highlights</h4>
+                  <h4 className="modal-section-title" style={{ fontSize: "1.1rem", fontWeight: "700", marginBottom: "0.75rem" }}>Subject Highlights</h4>
                   <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                     {book.tags.map((tag) => (
                       <span
@@ -476,11 +476,11 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
 
                 {/* Narrator Meta */}
                 <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-                  <h4 style={{ fontSize: "1.1rem", fontWeight: "700" }}>Audiobook Sample</h4>
-                  <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: "0.25rem" }}>
+                  <h4 className="audio-title" style={{ fontSize: "1.1rem", fontWeight: "700" }}>Audiobook Sample</h4>
+                  <p className="audio-narrator" style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: "0.25rem" }}>
                     Narrated by: <span style={{ color: "var(--text-primary)", fontWeight: "600" }}>{book.audioNarrator}</span>
                   </p>
-                  <p style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>
+                  <p className="audio-duration" style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>
                     Total Audiobook Duration: {book.audioDuration}
                   </p>
                 </div>
@@ -543,7 +543,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                 {/* Score Summary Block */}
                 <div style={{ display: "flex", gap: "2rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div style={{ textAlign: "center" }}>
-                    <h3 style={{ fontSize: "3rem", fontWeight: "800", fontFamily: "var(--font-title)", color: book.coverAccent }}>
+                    <h3 className="reviews-rating" style={{ fontSize: "3rem", fontWeight: "800", fontFamily: "var(--font-title)", color: book.coverAccent }}>
                       {book.rating}
                     </h3>
                     <div className="rating-stars" style={{ marginBottom: "0.25rem" }}>
@@ -624,7 +624,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
         >
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <span style={{ fontSize: "0.95rem", color: "var(--text-secondary)", fontWeight: "600" }}>Sanctuary Price:</span>
-            <span style={{ fontSize: "1.8rem", fontWeight: "800", fontFamily: "var(--font-title)", color: book.coverAccent }}>
+            <span className="modal-price" style={{ fontSize: "1.8rem", fontWeight: "800", fontFamily: "var(--font-title)", color: book.coverAccent }}>
               ${book.price}
             </span>
           </div>

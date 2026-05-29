@@ -255,6 +255,7 @@ export default function BookCard({
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", zIndex: 2 }}>
         <div>
           <motion.h3
+            className="card-title"
             animate={{ color: isHovered ? book.coverAccent : "var(--text-primary)" }}
             transition={{ duration: 0.25 }}
             style={{
@@ -267,6 +268,7 @@ export default function BookCard({
             {book.title}
           </motion.h3>
           <p
+            className="card-author"
             style={{
               fontSize: "0.85rem",
               color: "var(--text-secondary)",
@@ -319,6 +321,7 @@ export default function BookCard({
           }}
         >
           <span
+            className="card-price"
             style={{
               fontSize: "1.2rem",
               fontWeight: "800",
