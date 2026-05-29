@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen, Search, ShoppingBag, Heart, Sun, Moon, Sparkles, Folder, List, LayoutGrid, HelpCircle } from "lucide-react";
+import { BookOpen, Search, ShoppingBag, Heart, Sun, Moon, Sparkles, Folder, List, LayoutGrid, HelpCircle, User, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({
@@ -14,7 +14,10 @@ export default function Navbar({
   activeCategory,
   setActiveCategory,
   categories,
-  onScrollToQuiz
+  onScrollToQuiz,
+  user,
+  onOpenAuth,
+  onLogout
 }) {
   const [showMobileCategories, setShowMobileCategories] = useState(false);
 
@@ -189,6 +192,59 @@ export default function Navbar({
           </div>
         </div>
 
+        {/* User Auth Section inside Sidebar */}
+        <div style={{ padding: "1.25rem 1.5rem", borderTop: "1px solid var(--border-color)", marginTop: "auto" }}>
+          {user ? (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <div style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(var(--accent-rgb), 0.15)",
+                  border: "1px solid var(--accent-primary)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "700",
+                  color: "var(--accent-primary)"
+                }}>
+                  {user.name ? user.name[0].toUpperCase() : "U"}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>{user.name}</span>
+                  <span style={{ fontSize: "0.7rem", color: "var(--accent-secondary)", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px" }}>Curator Member</span>
+                </div>
+              </div>
+              <button 
+                onClick={onLogout}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#f87171",
+                  padding: "0.25rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                title="Log Out"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={onOpenAuth}
+              className="btn-primary"
+              style={{ width: "100%", padding: "0.6rem 1rem", fontSize: "0.8rem", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
+            >
+              <User size={14} />
+              <span>Enter Sanctuary</span>
+            </button>
+          )}
+        </div>
+
         {/* Sidebar Footer Info Card & Theme Toggle */}
         <div className="sidebar-footer">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
@@ -243,32 +299,75 @@ export default function Navbar({
           </span>
         </div>
 
-        {/* Small inline search bar for mobile */}
-        <div style={{ position: "relative", width: "140px" }}>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="input-premium"
-            style={{
-              width: "100%",
-              padding: "0.4rem 0.6rem 0.4rem 1.8rem",
-              fontSize: "0.75rem",
-              borderRadius: "8px",
-              backgroundColor: "var(--bg-secondary)"
-            }}
-          />
-          <Search
-            size={11}
-            style={{
-              position: "absolute",
-              left: "8px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "var(--text-muted)"
-            }}
-          />
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          {/* Small inline search bar for mobile */}
+          <div style={{ position: "relative", width: "120px" }}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="input-premium"
+              style={{
+                width: "100%",
+                padding: "0.4rem 0.6rem 0.4rem 1.8rem",
+                fontSize: "0.75rem",
+                borderRadius: "8px",
+                backgroundColor: "var(--bg-secondary)"
+              }}
+            />
+            <Search
+              size={11}
+              style={{
+                position: "absolute",
+                left: "8px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "var(--text-muted)"
+              }}
+            />
+          </div>
+
+          {/* User Auth Avatar / Sign In */}
+          {user ? (
+            <button
+              onClick={onLogout}
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "50%",
+                backgroundColor: "rgba(var(--accent-rgb), 0.15)",
+                border: "1px solid var(--accent-primary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "700",
+                color: "var(--accent-primary)",
+                fontSize: "0.75rem",
+                cursor: "pointer",
+                background: "none"
+              }}
+              title={`Sign Out (${user.name})`}
+            >
+              {user.name ? user.name[0].toUpperCase() : "U"}
+            </button>
+          ) : (
+            <button
+              onClick={onOpenAuth}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: "var(--accent-primary)"
+              }}
+              title="Sign In"
+            >
+              <User size={18} />
+            </button>
+          )}
         </div>
       </header>
 

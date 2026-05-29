@@ -9,6 +9,7 @@ import GlobalBg from "./components/GlobalBg";
 import { booksData, categories } from "./data/books";
 import { motion, AnimatePresence } from "framer-motion";
 import AdvancedDropdown from "./components/AdvancedDropdown";
+import AuthModal from "./components/AuthModal";
 import { Sparkles, Heart, Library, Compass, HelpCircle, ChevronDown, Folder } from "lucide-react";
 
 export default function App() {
@@ -16,6 +17,10 @@ export default function App() {
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Authentication States
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("lumina_user")) || null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   // Filter States
   const [activeCategory, setActiveCategory] = useState("All Collections");
@@ -52,18 +57,43 @@ export default function App() {
     addToast(`Switched to ${theme === "dark" ? "Warm Alabaster" : "Midnight Onyx"} Theme`, "info");
   };
 
+  // Authentication Handlers
+  const handleLogin = (mockUser) => {
+    setUser(mockUser);
+    localStorage.setItem("lumina_user", JSON.stringify(mockUser));
+    addToast(`Welcome to the Sanctuary, ${mockUser.name}!`);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("lumina_user");
+    addToast("Signed out of Lumina Sanctuary", "info");
+  };
+
+  const requireAuth = (action, message) => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+      if (message) addToast(message, "info");
+      return false;
+    }
+    action();
+    return true;
+  };
+
   // Add to cart logic
   const handleAddToCart = (book) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === book.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...prev, { ...book, quantity: 1 }];
-    });
-    addToast(`"${book.title}" added to acquisition cart!`);
+    requireAuth(() => {
+      setCartItems((prev) => {
+        const existing = prev.find((item) => item.id === book.id);
+        if (existing) {
+          return prev.map((item) =>
+            item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item
+          );
+        }
+        return [...prev, { ...book, quantity: 1 }];
+      });
+      addToast(`"${book.title}" added to acquisition cart!`);
+    }, "Please sign in to acquire literary volumes.");
   };
 
   // Update quantity inside cart drawer
@@ -93,14 +123,16 @@ export default function App() {
 
   // Wishlist toggle logic
   const handleToggleWishlist = (book) => {
-    const isAlreadyWishlisted = wishlistItems.some((item) => item.id === book.id);
-    if (isAlreadyWishlisted) {
-      setWishlistItems((prev) => prev.filter((item) => item.id !== book.id));
-      addToast(`Removed "${book.title}" from wishlist`, "info");
-    } else {
-      setWishlistItems((prev) => [...prev, book]);
-      addToast(`Added "${book.title}" to wishlist!`);
-    }
+    requireAuth(() => {
+      const isAlreadyWishlisted = wishlistItems.some((item) => item.id === book.id);
+      if (isAlreadyWishlisted) {
+        setWishlistItems((prev) => prev.filter((item) => item.id !== book.id));
+        addToast(`Removed "${book.title}" from wishlist`, "info");
+      } else {
+        setWishlistItems((prev) => [...prev, book]);
+        addToast(`Added "${book.title}" to wishlist!`);
+      }
+    }, "Please sign in to manage your wishlist.");
   };
 
   // Filter books list
@@ -117,24 +149,28 @@ export default function App() {
   });
 
   const handleOpenWishlistFilter = () => {
-    setIsFilterWishlistOnly((prev) => {
-      const targetState = !prev;
-      if (targetState) {
-        addToast("Showing wishlisted volumes", "info");
-      } else {
-        addToast("Showing all volumes", "info");
-      }
-      return targetState;
-    });
+    requireAuth(() => {
+      setIsFilterWishlistOnly((prev) => {
+        const targetState = !prev;
+        if (targetState) {
+          addToast("Showing wishlisted volumes", "info");
+        } else {
+          addToast("Showing all volumes", "info");
+        }
+        return targetState;
+      });
+    }, "Please sign in to view your wishlist.");
   };
 
   // Scroll smooth helper
   const handleScrollToQuiz = () => {
-    const el = document.getElementById("book-matcher-section");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-      addToast("Aligned matching scanner initialized", "info");
-    }
+    requireAuth(() => {
+      const el = document.getElementById("book-matcher-section");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        addToast("Aligned matching scanner initialized", "info");
+      }
+    }, "Please sign in to access the Book Matcher.");
   };
 
   return (
@@ -148,7 +184,7 @@ export default function App() {
         wishlistCount={wishlistItems.length}
         theme={theme}
         toggleTheme={handleToggleTheme}
-        onOpenCart={() => setIsCartOpen(true)}
+        onOpenCart={() => requireAuth(() => setIsCartOpen(true), "Please sign in to view your cart.")}
         onOpenWishlist={handleOpenWishlistFilter}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -159,6 +195,9 @@ export default function App() {
         }}
         categories={categories}
         onScrollToQuiz={handleScrollToQuiz}
+        user={user}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
+        onLogout={handleLogout}
       />
 
       {/* Main App Workspace */}
@@ -309,6 +348,8 @@ export default function App() {
             books={booksData}
             onOpenBook={setSelectedBook}
             onAddToCart={handleAddToCart}
+            user={user}
+            onOpenAuth={() => setIsAuthModalOpen(true)}
           />
         </div>
       </main>
@@ -408,6 +449,13 @@ export default function App() {
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLogin={handleLogin}
+      />
     </div>
   );
 }

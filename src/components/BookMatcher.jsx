@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Sparkles, BrainCircuit, RefreshCw, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
+export default function BookMatcher({ books, onOpenBook, onAddToCart, user, onOpenAuth }) {
   const [step, setStep] = useState(0); // 0: Start, 1: Q1, 2: Q2, 3: Q3, 4: Computing, 5: Result
   const [answers, setAnswers] = useState({
     setting: "",
@@ -10,6 +10,59 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart }) {
     vibe: ""
   });
   const [matchedBook, setMatchedBook] = useState(null);
+
+  if (!user) {
+    return (
+      <div
+        id="book-matcher-section"
+        className="glass-card"
+        style={{
+          width: "100%",
+          maxWidth: "800px",
+          margin: "4rem auto",
+          padding: "4rem 2rem",
+          borderRadius: "var(--radius-lg)",
+          position: "relative",
+          overflow: "hidden",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "1.5rem"
+        }}
+      >
+        <div
+          style={{
+            background: "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))",
+            color: "#ffffff",
+            padding: "1rem",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 10px 25px rgba(var(--accent-rgb), 0.35)"
+          }}
+        >
+          <Sparkles size={40} className="float-animation" />
+        </div>
+
+        <div>
+          <h2 className="font-serif matcher-title" style={{ fontSize: "2.2rem", fontWeight: "800", marginBottom: "0.5rem" }}>
+            Unlock Literary Alignment
+          </h2>
+          <p className="matcher-desc" style={{ color: "var(--text-secondary)", maxWidth: "560px", margin: "0 auto", fontSize: "1.05rem", lineHeight: "1.6" }}>
+            The AI-powered Matching Protocol matches books directly to your specific taste, reading habits, and visual preferences. Please sign in to unlock this sanctuary feature.
+          </p>
+        </div>
+
+        <button onClick={onOpenAuth} className="btn-primary" style={{ padding: "0.9rem 2.5rem", fontSize: "1rem", marginTop: "1rem" }}>
+          <span>Log In to Match</span>
+          <ArrowRight size={18} />
+        </button>
+      </div>
+    );
+  }
 
   const startQuiz = () => {
     setAnswers({ setting: "", length: "", vibe: "" });
