@@ -62,7 +62,7 @@ export default function AdvancedDropdown({
             <span style={{ fontSize: "0.7rem", fontWeight: "700", textTransform: "uppercase", color: "var(--text-muted)", letterSpacing: "1px" }}>
               Collection Archive
             </span>
-            <span style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-primary)" }}>
+            <span className="font-serif" style={{ fontSize: "1.05rem", fontWeight: "700", color: "var(--text-primary)" }}>
               {isFilterWishlistOnly ? `Wishlisted Sanctuary (${wishlistItems.length})` : activeCategory}
             </span>
           </div>
@@ -122,7 +122,7 @@ export default function AdvancedDropdown({
                       fill={isFilterWishlistOnly ? "currentColor" : "none"}
                       style={{ color: "var(--accent-secondary)" }}
                     />
-                    <span style={{ fontWeight: isFilterWishlistOnly ? "700" : "500" }}>
+                    <span className="font-serif" style={{ fontSize: "1.05rem", fontWeight: isFilterWishlistOnly ? "700" : "500" }}>
                       Wishlisted Sanctuary
                     </span>
                   </div>
@@ -155,7 +155,7 @@ export default function AdvancedDropdown({
                           color: isSelected ? "var(--accent-primary)" : "var(--text-muted)"
                         }}
                       />
-                      <span style={{ fontWeight: isSelected ? "700" : "500" }}>{cat}</span>
+                      <span className="font-serif" style={{ fontSize: "1.05rem", fontWeight: isSelected ? "700" : "500" }}>{cat}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                       <span className="dropdown-item-badge">{count}</span>

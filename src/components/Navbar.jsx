@@ -51,7 +51,7 @@ export default function Navbar({
               <BookOpen size={18} style={{ color: "#ffffff" }} />
             </div>
             <span
-              className="font-serif"
+              className="font-logo"
               style={{
                 fontSize: "1.25rem",
                 fontWeight: "800",
@@ -294,7 +294,7 @@ export default function Navbar({
           >
             <BookOpen size={14} style={{ color: "#ffffff" }} />
           </div>
-          <span className="font-serif" style={{ fontSize: "1.1rem", fontWeight: "800" }}>
+          <span className="font-logo" style={{ fontSize: "1.1rem", fontWeight: "800" }}>
             Lumina<span style={{ fontWeight: "300" }}>Books</span>
           </span>
         </div>
