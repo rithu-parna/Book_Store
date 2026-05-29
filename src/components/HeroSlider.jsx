@@ -217,6 +217,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                className="hero-slide-badge"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -257,6 +258,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
+                className="hero-slide-author"
                 style={{
                   fontSize: "1.15rem",
                   color: "rgba(255, 255, 255, 0.9)",
@@ -272,6 +274,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.35 }}
+                className="hero-slide-rating"
                 style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}
               >
                 <span className="rating-stars">
@@ -343,6 +346,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
 
             {/* Right Column: Floating 3D-effect Cover */}
             <div
+              className="hero-cover-container"
               style={{
                 flex: "1 1 350px",
                 display: "flex",
@@ -363,7 +367,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                   y: -12,
                   boxShadow: `0 35px 60px -10px ${currentBook.glowColor || "rgba(0,0,0,0.6)"}`
                 }}
-                className="float-animation"
+                className="hero-cover-book float-animation"
                 style={{
                   position: "relative",
                   width: "250px",
@@ -474,6 +478,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
       {/* Slide Navigation Controls */}
       <button
         onClick={handlePrev}
+        className="hero-nav-btn prev"
         style={{
           position: "absolute",
           left: "2rem",
@@ -503,6 +508,7 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
       </button>
       <button
         onClick={handleNext}
+        className="hero-nav-btn next"
         style={{
           position: "absolute",
           right: "2rem",
@@ -558,32 +564,6 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
           />
         ))}
       </div>
-
-      {/* Media query styling for responsive slides */}
-      <style>{`
-        @media (max-width: 768px) {
-          header, .main-content {
-            padding-top: 80px;
-          }
-          div[style*="height: 600px"] {
-            height: 700px !important;
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-          }
-          div[style*="min-height: 450px"] {
-            flex-direction: column !important;
-            justify-content: center !important;
-            gap: 1.5rem !important;
-            text-align: center !important;
-          }
-          div[style*="maxWidth: 520px"] {
-            margin: 0 auto !important;
-          }
-          div[style*="display: flex; gap: 1rem; alignItems: center"] {
-            justify-content: center !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

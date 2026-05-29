@@ -938,3 +938,105 @@ textarea {
   color: var(--text-muted);
   font-size: 0.85rem;
 }
+
+/* Hero Slider Mobile Responsive Styling */
+@media (max-width: 768px) {
+  .hero-slider-container {
+    height: auto !important;
+    min-height: 640px !important;
+    padding-top: 3.0rem !important;
+    padding-bottom: 4.5rem !important;
+  }
+
+  .hero-slide-content {
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 1.0rem !important;
+    text-align: center !important;
+    min-height: auto !important;
+  }
+
+  .hero-slide-left {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .hero-slide-title {
+    font-size: 2.0rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .hero-slide-author {
+    font-size: 0.95rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .hero-slide-badge {
+    margin-bottom: 0.85rem !important;
+  }
+
+  .hero-slide-rating {
+    justify-content: center !important;
+    margin-bottom: 0.85rem !important;
+  }
+
+  .hero-slide-desc {
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1.0rem !important;
+    max-width: 100% !important;
+    padding: 0 1.25rem !important;
+  }
+
+  .hero-slide-actions {
+    justify-content: center !important;
+    margin-bottom: 1.0rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .hero-slide-actions button {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .hero-slide-price {
+    font-size: 1.25rem !important;
+    margin-left: 0.25rem !important;
+  }
+
+  .hero-cover-container {
+    flex: 0 0 auto !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 1.0rem !important;
+  }
+
+  .hero-cover-book {
+    width: 150px !important;
+    height: 220px !important;
+    padding: 1.0rem !important;
+  }
+
+  /* Reposition navigation buttons to bottom corners to prevent overlaying the content */
+  .hero-nav-btn {
+    width: 36px !important;
+    height: 36px !important;
+    top: auto !important;
+    bottom: 1.2rem !important;
+    transform: none !important;
+  }
+
+  .hero-nav-btn.prev {
+    left: 1.2rem !important;
+  }
+
+  .hero-nav-btn.next {
+    right: 1.2rem !important;
+  }
+
+  .hero-nav-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
