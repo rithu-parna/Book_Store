@@ -1229,3 +1229,265 @@ textarea {
     padding: 2.0rem 1.5rem;
   }
 }
+
+/* Curated and Arrivals Custom Sections CSS */
+.curated-section {
+  max-width: 1200px;
+  margin: 4rem auto 0 auto;
+  padding: 0 2rem;
+}
+
+.curated-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.curated-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.curated-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.curated-link:hover {
+  opacity: 0.8;
+  transform: translateX(3px);
+}
+
+.curated-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.curated-card {
+  position: relative;
+  height: 140px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.curated-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.65) 60%, rgba(15, 23, 42, 0.35) 100%);
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+.curated-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.curated-card:hover::before {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.5) 60%, rgba(15, 23, 42, 0.2) 100%);
+}
+
+.curated-card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.curated-card-top h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.25rem 0;
+}
+
+.curated-card-top p {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.curated-card-bottom {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* New Arrivals Carousel CSS */
+.arrivals-section {
+  max-width: 1200px;
+  margin: 4rem auto 0 auto;
+  padding: 0 2rem;
+}
+
+.arrivals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.arrivals-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.arrivals-badge {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.arrivals-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.arrivals-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arrivals-btn:hover {
+  background: var(--border-color);
+  border-color: var(--text-muted);
+}
+
+.arrivals-carousel-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.25rem;
+  padding: 0.5rem 0 1.5rem 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.arrivals-carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.arrivals-card {
+  flex: 0 0 140px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.arrivals-card:hover {
+  transform: translateY(-4px);
+}
+
+.arrivals-cover-wrapper {
+  position: relative;
+  width: 140px;
+  height: 200px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.arrivals-cover-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.arrivals-card:hover .arrivals-cover-wrapper img {
+  transform: scale(1.08);
+}
+
+.arrivals-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.arrivals-book-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.arrivals-book-author {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.arrivals-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #eab308;
+}
+
+@media (max-width: 1024px) {
+  .curated-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .curated-grid {
+    grid-template-columns: 1fr;
+  }
+  .curated-section, .arrivals-section {
+    padding: 0 1.25rem;
+    margin-top: 3rem;
+  }
+}
