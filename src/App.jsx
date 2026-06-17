@@ -10,13 +10,35 @@ import { booksData, categories } from "./data/books";
 import { motion, AnimatePresence } from "framer-motion";
 import AdvancedDropdown from "./components/AdvancedDropdown";
 import AuthModal from "./components/AuthModal";
-import { Sparkles, Heart, Library, Compass, HelpCircle, ChevronDown, Folder } from "lucide-react";
+import AmbientPlayer from "./components/AmbientPlayer";
+import CuratorAchievementsModal from "./components/CuratorAchievementsModal";
+import { Sparkles, Heart, Library, Compass, HelpCircle, ChevronDown, Folder, ChevronLeft, ChevronRight, Star } from "lucide-react";
 
 export default function App() {
   const [theme, setTheme] = useState("dark");
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Dynamic Books State (supports live review submission)
+  const [books, setBooks] = useState(() => {
+    const saved = localStorage.getItem("lumina_books");
+    return saved ? JSON.parse(saved) : booksData;
+  });
+
+  // Gamification Milestones States
+  const [achievements, setAchievements] = useState(() => {
+    const saved = localStorage.getItem("lumina_achievements");
+    return saved ? JSON.parse(saved) : {
+      profileActivated: false,
+      alignmentSynced: false,
+      sampleRead: false,
+      curatedWishlist: false,
+      manifestPrepared: false,
+      reviewWritten: false
+    };
+  });
+  const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
 
   // Authentication States
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("lumina_user")) || null);
@@ -42,6 +64,120 @@ export default function App() {
       root.classList.add("theme-light");
     }
   }, [theme]);
+
+  // Persist Dynamic books
+  useEffect(() => {
+    localStorage.setItem("lumina_books", JSON.stringify(books));
+  }, [books]);
+
+  // Persist Curator Milestones
+  useEffect(() => {
+    localStorage.setItem("lumina_achievements", JSON.stringify(achievements));
+  }, [achievements]);
+
+  // State-driven automatic milestone triggers
+  useEffect(() => {
+    if (user) {
+      unlockMilestone("profileActivated");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (wishlistItems.length >= 2) {
+      unlockMilestone("curatedWishlist");
+    }
+  }, [wishlistItems]);
+
+  useEffect(() => {
+    if (cartItems.length >= 1) {
+      unlockMilestone("manifestPrepared");
+    }
+  }, [cartItems]);
+
+  // Unlocks specific milestone and schedules alerts
+  const unlockMilestone = (key) => {
+    setAchievements((prev) => {
+      if (prev[key]) return prev;
+      const next = { ...prev, [key]: true };
+
+      const prevCompleted = Object.values(prev).filter(Boolean).length;
+      const nextCompleted = Object.values(next).filter(Boolean).length;
+
+      if (nextCompleted > prevCompleted) {
+        setTimeout(() => {
+          addToast(`🏆 Milestone Unlocked: ${getMilestoneName(key)}!`, "info");
+          if (nextCompleted === 2) {
+            addToast("🎟️ Unlocked 20% Coupon Code: SCHOLAR20!", "success");
+          } else if (nextCompleted === 4) {
+            addToast("🎟️ Unlocked 25% Coupon Code: BIBLIOPHILE25!", "success");
+          } else if (nextCompleted === 6) {
+            addToast("🎟️ Unlocked 35% Coupon Code: SAGE35!", "success");
+          }
+        }, 500);
+      }
+      return next;
+    });
+  };
+
+  const getMilestoneName = (key) => {
+    switch (key) {
+      case "profileActivated": return "Sanctuary Initiate";
+      case "alignmentSynced": return "Algorithmic Alignment";
+      case "sampleRead": return "Scholar's Preview";
+      case "curatedWishlist": return "Sanctuary Registry";
+      case "manifestPrepared": return "Curator's Intent";
+      case "reviewWritten": return "Literary Critic";
+      default: return "Scholar Milestone";
+    }
+  };
+
+  // Add review and update dynamic book averages
+  const handleAddReview = (bookId, newReview) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((b) => {
+        if (b.id === bookId) {
+          const currentReviews = b.reviews || [
+            { author: "Arthur Pendelton", rating: 5, comment: "Rarely does a publication encapsulate ideas with such visual and architectural elegance. A masterpiece of bookmaking.", date: "May 12, 2026" },
+            { author: "Evelyn K.", rating: 4, comment: "The prose is lyrical, and the chapter pacing was outstanding. I finished it in two sittings under a rainy window. Highly recommended.", date: "April 28, 2026" }
+          ];
+          const updatedReviews = [newReview, ...currentReviews];
+          const totalRating = updatedReviews.reduce((sum, r) => sum + r.rating, 0);
+          const avgRating = parseFloat((totalRating / updatedReviews.length).toFixed(1));
+
+          return {
+            ...b,
+            reviews: updatedReviews,
+            reviewsCount: updatedReviews.length + 140,
+            rating: avgRating
+          };
+        }
+        return b;
+      })
+    );
+
+    // Sync selected book details if open
+    setSelectedBook((prevSelected) => {
+      if (prevSelected && prevSelected.id === bookId) {
+        const currentReviews = prevSelected.reviews || [
+          { author: "Arthur Pendelton", rating: 5, comment: "Rarely does a modern publication encapsulate ideas with such visual and architectural elegance. A masterpiece of bookmaking.", date: "May 12, 2026" },
+          { author: "Evelyn K.", rating: 4, comment: "The prose is lyrical, and the chapter pacing was outstanding. I finished it in two sittings under a rainy window. Highly recommended.", date: "April 28, 2026" }
+        ];
+        const updatedReviews = [newReview, ...currentReviews];
+        const totalRating = updatedReviews.reduce((sum, r) => sum + r.rating, 0);
+        const avgRating = parseFloat((totalRating / updatedReviews.length).toFixed(1));
+
+        return {
+          ...prevSelected,
+          reviews: updatedReviews,
+          reviewsCount: updatedReviews.length + 140,
+          rating: avgRating
+        };
+      }
+      return prevSelected;
+    });
+
+    unlockMilestone("reviewWritten");
+  };
 
   // Toast triggers
   const addToast = (message, type = "success") => {
@@ -136,7 +272,7 @@ export default function App() {
   };
 
   // Filter books list
-  const filteredBooks = booksData.filter((book) => {
+  const filteredBooks = books.filter((book) => {
     const matchesCategory =
       activeCategory === "All Collections" || book.category === activeCategory;
     const matchesSearch =
@@ -147,6 +283,57 @@ export default function App() {
 
     return matchesCategory && matchesSearch && matchesWishlist;
   });
+
+  const arrivalsRef = React.useRef(null);
+  
+  const scrollArrivals = (direction) => {
+    if (arrivalsRef.current) {
+      const scrollAmount = 320;
+      arrivalsRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  const newArrivals = [...books]
+    .sort((a, b) => b.publishYear - a.publishYear)
+    .slice(0, 10);
+
+  const curations = [
+    {
+      id: "cur-1",
+      title: "Cosmic Odyssey",
+      description: "Explore the universe",
+      booksCount: 128,
+      category: "Sci-Fi & Cyberpunk",
+      bgImage: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "cur-2",
+      title: "Cyberpunk Realms",
+      description: "Neon futures await",
+      booksCount: 96,
+      category: "Sci-Fi & Cyberpunk",
+      bgImage: "https://images.unsplash.com/photo-1515621061946-eff1c2a352bd?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "cur-3",
+      title: "Philosophical Depths",
+      description: "Wisdom timeless",
+      booksCount: 64,
+      category: "Philosophy & Deep Thoughts",
+      bgImage: "https://images.unsplash.com/photo-1608155686393-8fdd966d784d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "cur-4",
+      title: "Epic Fantasies",
+      description: "Legends reborn",
+      booksCount: 112,
+      category: "Fantasy & Mythology",
+      bgImage: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80"
+    }
+  ];
 
   const handleOpenWishlistFilter = () => {
     requireAuth(() => {
@@ -201,6 +388,7 @@ export default function App() {
         user={user}
         onOpenAuth={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        onOpenAchievements={() => requireAuth(() => setIsAchievementsOpen(true), "Please sign in to view your milestones.")}
       />
 
       {/* Main App Workspace */}
@@ -208,7 +396,94 @@ export default function App() {
         {/* Main Page Content */}
         <main className="main-content">
         {/* Slides / Hero Section */}
-        <HeroSlider books={booksData} onOpenBook={setSelectedBook} theme={theme} />
+        <HeroSlider books={books} onOpenBook={setSelectedBook} theme={theme} />
+
+        {/* Curated for Your Journey Section */}
+        <section className="curated-section">
+          <div className="curated-header">
+            <h2 className="curated-header-title">
+              <span style={{ color: "var(--accent-primary)" }}>✦</span> Curated for Your Journey
+            </h2>
+            <a 
+              className="curated-link" 
+              onClick={() => {
+                setActiveCategory("All Collections");
+                setIsFilterWishlistOnly(false);
+                const catalogEl = document.getElementById("catalog-section");
+                if (catalogEl) catalogEl.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              <span>View All Collections</span>
+              <Compass size={14} style={{ transform: "rotate(45deg)" }} />
+            </a>
+          </div>
+
+          <div className="curated-grid">
+            {curations.map((cur) => (
+              <div 
+                key={cur.id} 
+                className="curated-card"
+                style={{ backgroundImage: `url(${cur.bgImage})` }}
+                onClick={() => {
+                  setActiveCategory(cur.category);
+                  setIsFilterWishlistOnly(false);
+                  const catalogEl = document.getElementById("catalog-section");
+                  if (catalogEl) catalogEl.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <div className="curated-card-content">
+                  <div className="curated-card-top">
+                    <h3>{cur.title}</h3>
+                    <p>{cur.description}</p>
+                  </div>
+                  <div className="curated-card-bottom">
+                    {cur.booksCount} Books
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* New Arrivals Section */}
+        <section className="arrivals-section">
+          <div className="arrivals-header">
+            <div className="arrivals-title-wrapper">
+              <span className="arrivals-badge">NEW</span>
+              <h2 className="curated-header-title" style={{ margin: 0 }}>New Arrivals</h2>
+            </div>
+            <div className="arrivals-controls">
+              <button className="arrivals-btn" onClick={() => scrollArrivals("left")}>
+                <ChevronLeft size={18} />
+              </button>
+              <button className="arrivals-btn" onClick={() => scrollArrivals("right")}>
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className="arrivals-carousel-container" ref={arrivalsRef}>
+            {newArrivals.map((book) => (
+              <div 
+                key={book.id} 
+                className="arrivals-card"
+                onClick={() => setSelectedBook(book)}
+              >
+                <div className="arrivals-cover-wrapper">
+                  <img src={book.image || "/covers/default.png"} alt={book.title} />
+                </div>
+                <div className="arrivals-info">
+                  <h3 className="arrivals-book-title">{book.title}</h3>
+                  <p className="arrivals-book-author">{book.author}</p>
+                  <div className="arrivals-rating">
+                    <Star size={12} fill="currentColor" />
+                    <span>{book.rating}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Catalog Section Header */}
         <div id="catalog-section" style={{ maxWidth: "1200px", margin: "4rem auto 0 auto", padding: "0 2rem" }}>
@@ -285,7 +560,7 @@ export default function App() {
                   isFilterWishlistOnly={isFilterWishlistOnly}
                   setIsFilterWishlistOnly={setIsFilterWishlistOnly}
                   wishlistItems={wishlistItems}
-                  booksData={booksData}
+                  booksData={books}
                 />
               </div>
             </div>
@@ -348,11 +623,12 @@ export default function App() {
         {/* Book Matcher Recommendation Widget */}
         <div style={{ padding: "0 2rem", margin: "6rem 0" }}>
           <BookMatcher
-            books={booksData}
+            books={books}
             onOpenBook={setSelectedBook}
             onAddToCart={handleAddToCart}
             user={user}
             onOpenAuth={() => setIsAuthModalOpen(true)}
+            onQuizComplete={() => unlockMilestone("alignmentSynced")}
           />
         </div>
       </main>
@@ -403,6 +679,9 @@ export default function App() {
             onAddToCart={handleAddToCart}
             onToggleWishlist={handleToggleWishlist}
             isWishlisted={wishlistItems.some((w) => w.id === selectedBook.id)}
+            user={user}
+            onAddReview={handleAddReview}
+            onReadSample={() => unlockMilestone("sampleRead")}
           />
         )}
       </AnimatePresence>
@@ -458,6 +737,17 @@ export default function App() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onLogin={handleLogin}
+      />
+
+      {/* Interactive Ambient Soundscape Player */}
+      <AmbientPlayer />
+
+      {/* Curator Milestone Achievements Modal */}
+      <CuratorAchievementsModal
+        isOpen={isAchievementsOpen}
+        onClose={() => setIsAchievementsOpen(false)}
+        achievements={achievements}
+        addToast={addToast}
       />
     </div>
   );
