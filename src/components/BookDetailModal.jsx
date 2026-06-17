@@ -1,29 +1,145 @@
 import React, { useState, useEffect } from "react";
-import { X, Star, ShoppingCart, Heart, BookOpen, Volume2, HelpCircle, FileText, Play, Pause, Calendar, Award } from "lucide-react";
+import { X, Star, ShoppingCart, Heart, BookOpen, Volume2, HelpCircle, FileText, Play, Pause, Calendar, Award, MessageSquare, Check, Sparkles, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BookReaderPreview from "./BookReaderPreview";
 
-export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWishlist, isWishlisted }) {
+export default function BookDetailModal({ 
+  book, 
+  onClose, 
+  onAddToCart, 
+  onToggleWishlist, 
+  isWishlisted,
+  user,
+  onAddReview,
+  onReadSample
+}) {
   const [activeTab, setActiveTab] = useState("overview"); // overview, preview, audio, reviews
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
 
-  // Audio Playback simulation ticker
+  // Audio / Speech Synthesis States
+  const [isSpeechSupported, setIsSpeechSupported] = useState(false);
+
+  // Review Form States
+  const [reviewName, setReviewName] = useState(user?.name || "");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      setIsSpeechSupported(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user?.name) {
+      setReviewName(user.name);
+    }
+  }, [user]);
+
+  // Cancel SpeechSynthesis when switching tabs or closing
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      setIsPlayingAudio(false);
+      setAudioProgress(0);
+    };
+  }, [activeTab, book]);
+
+  // Track achievement when user is on the preview tab
+  useEffect(() => {
+    if (activeTab === "preview" && onReadSample) {
+      onReadSample();
+    }
+  }, [activeTab, onReadSample]);
+
+  // Audio Playback simulation / speech ticker
   useEffect(() => {
     let interval;
     if (isPlayingAudio) {
       interval = setInterval(() => {
         setAudioProgress((prev) => {
           if (prev >= 100) {
+            if (isSpeechSupported) {
+              window.speechSynthesis.cancel();
+            }
             setIsPlayingAudio(false);
             return 0;
           }
-          return prev + 1;
+          // Increment slower if speech synthesis is reading
+          return prev + (isSpeechSupported ? 0.35 : 1);
         });
-      }, 300);
+      }, 200);
     }
     return () => clearInterval(interval);
-  }, [isPlayingAudio]);
+  }, [isPlayingAudio, isSpeechSupported]);
+
+  const handlePlayAudiobook = () => {
+    if (!isSpeechSupported) {
+      setIsPlayingAudio(!isPlayingAudio);
+      return;
+    }
+
+    if (isPlayingAudio) {
+      window.speechSynthesis.pause();
+      setIsPlayingAudio(false);
+    } else {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setIsPlayingAudio(true);
+      } else {
+        window.speechSynthesis.cancel();
+        
+        const textToSpeak = `${book.title} by ${book.author}. Published in ${book.publishYear}. Synopsis: ${book.synopsis}`;
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        
+        utterance.onend = () => {
+          setIsPlayingAudio(false);
+          setAudioProgress(0);
+        };
+        
+        utterance.onerror = () => {
+          setIsPlayingAudio(false);
+          setAudioProgress(0);
+        };
+
+        setIsPlayingAudio(true);
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  };
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    if (!reviewComment.trim()) return;
+
+    setIsSubmittingReview(true);
+    setTimeout(() => {
+      const newReview = {
+        author: reviewName.trim() || "Anonymous Scholar",
+        rating: reviewRating,
+        comment: reviewComment.trim(),
+        date: new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        })
+      };
+
+      if (onAddReview) {
+        onAddReview(book.id, newReview);
+      }
+
+      setIsSubmittingReview(false);
+      setReviewSuccess(true);
+      setReviewComment("");
+      setTimeout(() => setReviewSuccess(false), 3000);
+    }, 1200);
+  };
 
   if (!book) return null;
 
@@ -160,6 +276,23 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                 boxShadow: `0 15px 30px rgba(0,0,0,0.4)`
               }}
             >
+              {/* Bookmark Ribbon */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-5px",
+                  right: "22px",
+                  width: "8px",
+                  height: "38px",
+                  backgroundColor: book.coverAccent,
+                  zIndex: 3,
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
+                  transform: "translateZ(5px) rotateX(15deg)",
+                  transformOrigin: "center top",
+                  clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 50% 82%, 0% 100%)"
+                }}
+              />
+
               {/* Front Cover */}
               <div
                 style={{
@@ -170,11 +303,12 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                     : book.themeColor,
                   borderRadius: "3px 6px 6px 3px",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  transform: "translateZ(6px)",
-                  zIndex: 5
+                  transform: "translateZ(10px)",
+                  zIndex: 5,
+                  overflow: "hidden"
                 }}
               >
-                {/* Spine Shadow */}
+                {/* Spine Gold Foil simulation band */}
                 <div
                   style={{
                     position: "absolute",
@@ -182,8 +316,9 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                     top: 0,
                     bottom: 0,
                     width: "8px",
-                    background: "linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.05) 45%, rgba(0,0,0,0.2) 100%)",
-                    zIndex: 6
+                    background: "linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(212, 175, 55, 0.35) 30%, rgba(0,0,0,0.18) 60%, rgba(212, 175, 55, 0.22) 100%)",
+                    borderRight: "1px solid rgba(212, 175, 55, 0.38)",
+                    zIndex: 7
                   }}
                 />
                 
@@ -206,13 +341,13 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                   top: "2px",
                   bottom: "2px",
                   right: "0",
-                  width: "12px",
+                  width: "20px",
                   backgroundColor: "var(--bg-secondary)",
                   border: "1px solid var(--border-color)",
                   backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
-                  transform: "rotateY(90deg) translateZ(6px)",
+                  transform: "rotateY(90deg) translateZ(10px)",
                   transformOrigin: "right center",
-                  borderRadius: "0 2px 2px 0",
+                  borderRadius: "0 3px 3px 0",
                   zIndex: 4
                 }}
               />
@@ -224,13 +359,13 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                   left: "2px",
                   right: "2px",
                   bottom: "0",
-                  height: "12px",
+                  height: "20px",
                   backgroundColor: "var(--bg-secondary)",
                   border: "1px solid var(--border-color)",
                   backgroundImage: "repeating-linear-gradient(to right, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
-                  transform: "rotateX(90deg) translateZ(6px)",
+                  transform: "rotateX(90deg) translateZ(10px)",
                   transformOrigin: "center bottom",
-                  borderRadius: "0 0 2px 2px",
+                  borderRadius: "0 0 3px 3px",
                   zIndex: 4
                 }}
               />
@@ -476,11 +611,18 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
 
                 {/* Narrator Meta */}
                 <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-                  <h4 className="audio-title" style={{ fontSize: "1.1rem", fontWeight: "700" }}>Audiobook Sample</h4>
+                  <h4 className="audio-title" style={{ fontSize: "1.1rem", fontWeight: "700" }}>
+                    {isSpeechSupported ? "Sanctuary Voice Narrator" : "Audiobook Sample"}
+                  </h4>
                   <p className="audio-narrator" style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: "0.25rem" }}>
-                    Narrated by: <span style={{ color: "var(--text-primary)", fontWeight: "600" }}>{book.audioNarrator}</span>
+                    {isSpeechSupported ? "Narrator: Neural Voice Assistant" : `Narrating voice: ${book.audioNarrator}`}
                   </p>
-                  <p className="audio-duration" style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>
+                  <p style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginTop: "0.25rem" }} className="audio-desc">
+                    {isSpeechSupported 
+                      ? "Listening to computed neural read-aloud of title and synopsis." 
+                      : "Audio preview simulation. Full audiobooks available upon purchase."}
+                  </p>
+                  <p className="audio-duration" style={{ color: "var(--text-muted)", fontSize: "0.8rem", marginTop: "0.5rem" }}>
                     Total Audiobook Duration: {book.audioDuration}
                   </p>
                 </div>
@@ -511,7 +653,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => setIsPlayingAudio(!isPlayingAudio)}
+                      onClick={handlePlayAudiobook}
                       style={{
                         cursor: "pointer",
                         background: `linear-gradient(135deg, ${book.coverAccent}, ${book.coverAccent}cc)`,
@@ -548,7 +690,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                     </h3>
                     <div className="rating-stars" style={{ marginBottom: "0.25rem" }}>
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} size={15} fill={i < Math.floor(book.rating) ? "currentColor" : "none"} />
+                        <Star key={i} size={15} fill={i < Math.floor(book.rating) ? "currentColor" : "none"} style={{ color: "#fbbf24" }} />
                       ))}
                     </div>
                     <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>
@@ -577,13 +719,129 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                   </div>
                 </div>
 
+                {/* Write a review form */}
+                <div 
+                  className="glass-card" 
+                  style={{ 
+                    padding: "1.5rem", 
+                    border: "1px solid var(--border-color)",
+                    backgroundColor: "var(--card-bg)"
+                  }}
+                >
+                  <h4 style={{ fontSize: "1rem", fontWeight: "700", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <MessageSquare size={16} style={{ color: book.coverAccent }} />
+                    <span>Share Your Sanctuary Review</span>
+                  </h4>
+                  
+                  {reviewSuccess ? (
+                    <motion.div 
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      style={{ 
+                        display: "flex", 
+                        flexDirection: "column", 
+                        alignItems: "center", 
+                        gap: "0.5rem",
+                        padding: "1rem 0",
+                        textAlign: "center",
+                        color: "#10b981"
+                      }}
+                    >
+                      <Check size={32} />
+                      <span style={{ fontWeight: "700", fontSize: "0.95rem" }}>Review Registered Successfully!</span>
+                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>Your critical thoughts have been cataloged.</span>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={handleSubmitReview} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                        {/* Name input */}
+                        <div style={{ flex: "1 1 200px" }}>
+                          <label style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--text-secondary)", marginBottom: "0.35rem", display: "block" }}>
+                            Your Scholar Name
+                          </label>
+                          <input 
+                            type="text" 
+                            required
+                            placeholder="e.g. Arthur Pendelton"
+                            value={reviewName}
+                            onChange={(e) => setReviewName(e.target.value)}
+                            className="input-premium"
+                            style={{ width: "100%", padding: "0.5rem 0.75rem", fontSize: "0.85rem", borderRadius: "8px", border: "1px solid var(--border-color)" }}
+                          />
+                        </div>
+                        
+                        {/* Star Rating Select */}
+                        <div style={{ flex: "0 0 150px" }}>
+                          <label style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--text-secondary)", marginBottom: "0.35rem", display: "block" }}>
+                            Rating Alignment
+                          </label>
+                          <div style={{ display: "flex", gap: "4px", padding: "0.4rem 0" }}>
+                            {Array.from({ length: 5 }).map((_, i) => {
+                              const starValue = i + 1;
+                              return (
+                                <button
+                                  key={i}
+                                  type="button"
+                                  onClick={() => setReviewRating(starValue)}
+                                  style={{ cursor: "pointer", color: starValue <= reviewRating ? "#fbbf24" : "var(--text-muted)", background: "none", border: "none", padding: 0 }}
+                                >
+                                  <Star size={18} fill={starValue <= reviewRating ? "currentColor" : "none"} />
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Comment text */}
+                      <div>
+                        <label style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--text-secondary)", marginBottom: "0.35rem", display: "block" }}>
+                          Critical Comments
+                        </label>
+                        <textarea
+                          required
+                          rows={3}
+                          placeholder="Share your thoughts on the typography, prose, and ideas in this volume..."
+                          value={reviewComment}
+                          onChange={(e) => setReviewComment(e.target.value)}
+                          className="input-premium"
+                          style={{ width: "100%", padding: "0.6rem 0.75rem", fontSize: "0.85rem", borderRadius: "8px", resize: "none", border: "1px solid var(--border-color)" }}
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmittingReview}
+                        className="btn-primary"
+                        style={{ 
+                          alignSelf: "flex-end", 
+                          padding: "0.5rem 1.25rem", 
+                          fontSize: "0.8rem", 
+                          borderRadius: "8px",
+                          border: "none",
+                          background: `linear-gradient(135deg, ${book.coverAccent}, ${book.coverAccent}cc)`
+                        }}
+                      >
+                        {isSubmittingReview ? (
+                          <span>Registering...</span>
+                        ) : (
+                          <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                            <span>Submit Review</span>
+                            <Send size={12} />
+                          </span>
+                        )}
+                      </button>
+                    </form>
+                  )}
+                </div>
+
                 {/* Selected Review Comments */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                   <h4 style={{ fontSize: "1rem", fontWeight: "700" }}>Top Critical & Creative Reviews</h4>
-                  {[
+                  {(book.reviews || [
                     { author: "Arthur Pendelton", rating: 5, comment: "Rarely does a modern publication encapsulate ideas with such visual and architectural elegance. A masterpiece of bookmaking.", date: "May 12, 2026" },
                     { author: "Evelyn K.", rating: 4, comment: "The prose is lyrical, and the chapter pacing was outstanding. I finished it in two sittings under a rainy window. Highly recommended.", date: "April 28, 2026" }
-                  ].map((rev, idx) => (
+                  ]).map((rev, idx) => (
                     <div key={idx} className="glass-card" style={{ padding: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <span style={{ fontWeight: "700", fontSize: "0.9rem" }}>{rev.author}</span>
@@ -591,7 +849,7 @@ export default function BookDetailModal({ book, onClose, onAddToCart, onToggleWi
                       </div>
                       <div className="rating-stars">
                         {Array.from({ length: 5 }).map((_, i) => (
-                          <Star key={i} size={11} fill={i < rev.rating ? "currentColor" : "none"} />
+                          <Star key={i} size={11} fill={i < rev.rating ? "currentColor" : "none"} style={{ color: "#fbbf24" }} />
                         ))}
                       </div>
                       <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontStyle: "italic", lineHeight: "1.6" }}>
