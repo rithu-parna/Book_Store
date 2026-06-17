@@ -10,22 +10,22 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
   const featuredBooks = books.slice(0, 4); // Showcase first 4 books
 
   const coverMotions = {
-    1: { // Chasing the Neon Horizon: cyber energetic slide-in from right
+    "b1": { // Chasing the Neon Horizon: cyber energetic slide-in from right
       initial: { x: 120, y: -20, scale: 0.8, opacity: 0, rotate: 12 },
       animate: { x: 0, y: 0, scale: 1, opacity: 1, rotate: 3 },
       transition: { type: "spring", stiffness: 120, damping: 14 }
     },
-    2: { // Echoes of the Void: float in slowly from below
+    "b2": { // Echoes of the Void: float in slowly from below
       initial: { y: 80, scale: 0.9, opacity: 0, rotate: -10 },
       animate: { y: 0, scale: 1, opacity: 1, rotate: -3 },
       transition: { type: "spring", stiffness: 90, damping: 16 }
     },
-    3: { // The Architecture of Dreams: spin in organically
+    "b3": { // The Architecture of Dreams: spin in organically
       initial: { scale: 0.6, opacity: 0, rotate: -30 },
       animate: { scale: 1, opacity: 1, rotate: 4 },
       transition: { type: "spring", stiffness: 140, damping: 12 }
     },
-    4: { // Shadows and Silk: elegant drift from left
+    "b4": { // Shadows and Silk: elegant drift from left
       initial: { y: 100, x: -50, scale: 0.85, opacity: 0, rotate: -15 },
       animate: { y: 0, x: 0, scale: 1, opacity: 1, rotate: -2 },
       transition: { type: "spring", stiffness: 110, damping: 15 }
@@ -33,6 +33,8 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
   };
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isCoverHovered, setIsCoverHovered] = useState(false);
+  const [coverMouseOffset, setCoverMouseOffset] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e) => {
     const { clientX, clientY, currentTarget } = e;
@@ -44,6 +46,19 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
 
   const handleMouseLeave = () => {
     setMousePos({ x: 0, y: 0 });
+  };
+
+  const handleCoverMouseMove = (e) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const x = ((clientX - left) / width - 0.5) * 16;
+    const y = ((clientY - top) / height - 0.5) * 16;
+    setCoverMouseOffset({ x, y });
+  };
+
+  const handleCoverMouseLeave = () => {
+    setIsCoverHovered(false);
+    setCoverMouseOffset({ x: 0, y: 0 });
   };
 
   useEffect(() => {
@@ -352,123 +367,216 @@ export default function HeroSlider({ books, onOpenBook, theme = "dark" }) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                perspective: "1000px"
+                perspective: "1200px"
               }}
             >
               <motion.div
                 key={currentBook.id}
                 initial={coverMotions[currentBook.id]?.initial || { scale: 0.8, opacity: 0, rotate: -5 }}
-                animate={coverMotions[currentBook.id]?.animate || { scale: 1, opacity: 1, rotate: 3 }}
-                transition={coverMotions[currentBook.id]?.transition || { type: "spring", stiffness: 100, delay: 0.2 }}
-                whileHover={{
-                  rotateY: 18,
-                  rotateX: -12,
-                  scale: 1.06,
-                  y: -12,
-                  boxShadow: `0 35px 60px -10px ${currentBook.glowColor || "rgba(0,0,0,0.6)"}`
+                animate={{
+                  opacity: 1,
+                  rotateY: isCoverHovered ? 18 + coverMouseOffset.x : (coverMotions[currentBook.id]?.animate?.rotate || 0) + 5,
+                  rotateX: isCoverHovered ? -12 - coverMouseOffset.y : 3,
+                  scale: isCoverHovered ? 1.06 : 1,
+                  y: isCoverHovered ? -12 : 0,
+                  boxShadow: isCoverHovered
+                    ? `0 35px 60px -10px ${currentBook.glowColor || "rgba(0,0,0,0.6)"}`
+                    : `0 25px 50px -12px ${currentBook.glowColor || "rgba(0,0,0,0.5)"}`
                 }}
+                transition={{ type: "spring", stiffness: 120, damping: 15 }}
+                onMouseEnter={() => setIsCoverHovered(true)}
+                onMouseMove={handleCoverMouseMove}
+                onMouseLeave={handleCoverMouseLeave}
                 className="hero-cover-book float-animation"
                 style={{
                   position: "relative",
                   width: "250px",
                   height: "360px",
                   borderRadius: "8px 16px 16px 8px",
-                  background: currentBook.image
-                    ? `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%), url(${currentBook.image}) center/cover no-repeat`
-                    : currentBook.themeColor,
-                  boxShadow: `0 25px 50px -12px ${currentBook.glowColor || "rgba(0,0,0,0.5)"}`,
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  padding: "2rem",
                   cursor: "pointer",
                   transformStyle: "preserve-3d"
                 }}
                 onClick={() => onOpenBook(currentBook)}
               >
-                {/* Book spine simulation overlay */}
-                <div
+                {/* Bookmark Ribbon */}
+                <motion.div
+                  animate={{
+                    y: isCoverHovered ? 12 : 0,
+                    rotateZ: isCoverHovered ? 3 : 0
+                  }}
+                  transition={{ type: "spring", stiffness: 120, damping: 12 }}
                   style={{
                     position: "absolute",
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
+                    top: "-5px",
+                    right: "35px",
                     width: "12px",
-                    background: "linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(255,255,255,0.1) 40%, rgba(0,0,0,0.2) 100%)",
-                    borderRight: "1px solid rgba(255,255,255,0.05)",
-                    zIndex: 3
+                    height: "55px",
+                    backgroundColor: currentBook.coverAccent,
+                    zIndex: 3,
+                    boxShadow: "0 3px 6px rgba(0,0,0,0.25)",
+                    transform: "translateZ(8px) rotateX(15deg)",
+                    transformOrigin: "center top",
+                    clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 50% 84%, 0% 100%)"
                   }}
                 />
 
-                {/* Abstract Vector Artwork Pattern on Cover (Only show as fallback) */}
-                {!currentBook.image && (
-                  <div
+                {/* Front Cover Layer */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: currentBook.image
+                      ? `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%), url(${currentBook.image}) center/cover no-repeat`
+                      : currentBook.themeColor,
+                    borderRadius: "8px 16px 16px 8px",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    transform: "translateZ(15px)",
+                    zIndex: 5,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    padding: "2rem"
+                  }}
+                >
+                  {/* Shimmer sweep reflection on hover */}
+                  <motion.div
+                    initial={{ x: "-100%", y: "-100%" }}
+                    animate={{
+                      x: isCoverHovered ? "100%" : "-100%",
+                      y: isCoverHovered ? "100%" : "-100%"
+                    }}
+                    transition={{ duration: 1.1, ease: "easeInOut" }}
                     style={{
                       position: "absolute",
-                      top: "10%",
-                      right: "-10%",
-                      width: "180px",
-                      height: "180px",
-                      borderRadius: "50%",
-                      background: "rgba(255,255,255,0.05)",
-                      border: `1px solid ${currentBook.coverAccent}44`,
-                      boxShadow: `inset 0 0 20px ${currentBook.coverAccent}22`,
+                      inset: 0,
+                      background: "linear-gradient(135deg, transparent, rgba(255,255,255,0.0) 30%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.0) 70%, transparent)",
+                      zIndex: 6,
                       pointerEvents: "none"
                     }}
                   />
-                )}
 
-                {!currentBook.image && (
-                  <>
-                    <div style={{ zIndex: 2 }}>
-                      <div
-                        style={{
-                          height: "3px",
-                          width: "40px",
-                          backgroundColor: currentBook.coverAccent,
-                          marginBottom: "1rem"
-                        }}
-                      />
-                      <h3
-                        className="font-serif"
-                        style={{
-                          color: "#ffffff",
-                          fontSize: "1.4rem",
-                          fontWeight: "700",
-                          lineHeight: "1.2",
-                          textShadow: "0 2px 4px rgba(0,0,0,0.3)"
-                        }}
-                      >
-                        {currentBook.title}
-                      </h3>
-                    </div>
+                  {/* Spine Gold Foil simulation band on Cover */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: "12px",
+                      background: "linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(212, 175, 55, 0.4) 30%, rgba(0,0,0,0.2) 60%, rgba(212, 175, 55, 0.25) 100%)",
+                      borderRight: "1px solid rgba(212, 175, 55, 0.45)",
+                      zIndex: 7
+                    }}
+                  />
 
-                    <div style={{ zIndex: 2 }}>
-                      <p
-                        style={{
-                          color: "#94a3b8",
-                          fontSize: "0.85rem",
-                          textTransform: "uppercase",
-                          letterSpacing: "1px"
-                        }}
-                      >
-                        Author
-                      </p>
-                      <p
-                        style={{
-                          color: "#ffffff",
-                          fontSize: "0.95rem",
-                          fontWeight: "600",
-                          textShadow: "0 1px 2px rgba(0,0,0,0.3)"
-                        }}
-                      >
-                        {currentBook.author}
-                      </p>
-                    </div>
-                  </>
-                )}
+                  {/* Abstract Vector Artwork Pattern on Cover (Only show as fallback) */}
+                  {!currentBook.image && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10%",
+                        right: "-10%",
+                        width: "180px",
+                        height: "180px",
+                        borderRadius: "50%",
+                        background: "rgba(255,255,255,0.05)",
+                        border: `1px solid ${currentBook.coverAccent}44`,
+                        boxShadow: `inset 0 0 20px ${currentBook.coverAccent}22`,
+                        pointerEvents: "none"
+                      }}
+                    />
+                  )}
+
+                  {!currentBook.image ? (
+                    <>
+                      <div style={{ zIndex: 2 }}>
+                        <div
+                          style={{
+                            height: "3px",
+                            width: "40px",
+                            backgroundColor: currentBook.coverAccent,
+                            marginBottom: "1rem"
+                          }}
+                        />
+                        <h3
+                          className="font-serif"
+                          style={{
+                            color: "#ffffff",
+                            fontSize: "1.4rem",
+                            fontWeight: "700",
+                            lineHeight: "1.2",
+                            textShadow: "0 2px 4px rgba(0,0,0,0.3)"
+                          }}
+                        >
+                          {currentBook.title}
+                        </h3>
+                      </div>
+
+                      <div style={{ zIndex: 2 }}>
+                        <p
+                          style={{
+                            color: "#94a3b8",
+                            fontSize: "0.85rem",
+                            textTransform: "uppercase",
+                            letterSpacing: "1px"
+                          }}
+                        >
+                          Author
+                        </p>
+                        <p
+                          style={{
+                            color: "#ffffff",
+                            fontSize: "0.95rem",
+                            fontWeight: "600",
+                            textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+                          }}
+                        >
+                          {currentBook.author}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    // Render blank spacer divs so that image covers are simple clean art sheets
+                    <div />
+                  )}
+                </div>
+
+                {/* 3D Pages Stack (Right Edge depth) */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "3px",
+                    bottom: "3px",
+                    right: "0",
+                    width: "30px",
+                    backgroundColor: "var(--bg-secondary)",
+                    border: "1px solid var(--border-color)",
+                    backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+                    transform: "rotateY(90deg) translateZ(15px)",
+                    transformOrigin: "right center",
+                    borderRadius: "0 5px 5px 0",
+                    zIndex: 4
+                  }}
+                />
+
+                {/* 3D Bottom Pages (Bottom depth) */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "3px",
+                    right: "3px",
+                    bottom: "0",
+                    height: "30px",
+                    backgroundColor: "var(--bg-secondary)",
+                    border: "1px solid var(--border-color)",
+                    backgroundImage: "repeating-linear-gradient(to right, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
+                    transform: "rotateX(90deg) translateZ(15px)",
+                    transformOrigin: "center bottom",
+                    borderRadius: "0 0 5px 5px",
+                    zIndex: 4
+                  }}
+                />
               </motion.div>
             </div>
           </motion.div>

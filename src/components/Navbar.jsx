@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen, Search, ShoppingBag, Heart, Sun, Moon, Sparkles, Folder, List, LayoutGrid, HelpCircle, User, LogOut } from "lucide-react";
+import { BookOpen, Search, ShoppingBag, Heart, Sun, Moon, Sparkles, Folder, List, LayoutGrid, HelpCircle, User, LogOut, Award } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({
@@ -17,7 +17,8 @@ export default function Navbar({
   onScrollToQuiz,
   user,
   onOpenAuth,
-  onLogout
+  onLogout,
+  onOpenAchievements
 }) {
   const [showMobileCategories, setShowMobileCategories] = useState(false);
 
@@ -134,6 +135,14 @@ export default function Navbar({
               >
                 <Sparkles size={16} className="spin-slow" style={{ color: "var(--accent-secondary)" }} />
                 <span>Book Matcher</span>
+              </button>
+
+              <button
+                onClick={onOpenAchievements}
+                className="sidebar-link active-hover"
+              >
+                <Award size={16} style={{ color: "var(--accent-primary)" }} />
+                <span>Curator Milestones</span>
               </button>
 
               <button
@@ -327,6 +336,26 @@ export default function Navbar({
               }}
             />
           </div>
+
+          {/* Curator Milestones Mobile Trigger */}
+          {user && (
+            <button
+              onClick={onOpenAchievements}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: "var(--accent-primary)",
+                marginRight: "0.2rem"
+              }}
+              title="Curator Milestones"
+            >
+              <Award size={18} />
+            </button>
+          )}
 
           {/* User Auth Avatar / Sign In */}
           {user ? (
