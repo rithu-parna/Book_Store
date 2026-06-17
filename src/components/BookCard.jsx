@@ -12,6 +12,21 @@ export default function BookCard({
   onMouseLeave
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+
+  const handleCardMouseMove = (e) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const x = ((clientX - left) / width - 0.5) * 12; // tilt angle
+    const y = ((clientY - top) / height - 0.5) * 12;
+    setMouseOffset({ x, y });
+  };
+
+  const handleCardMouseLeave = () => {
+    setIsHovered(false);
+    setMouseOffset({ x: 0, y: 0 });
+    if (onMouseLeave) onMouseLeave();
+  };
 
   return (
     <motion.div
@@ -23,7 +38,7 @@ export default function BookCard({
         y: isHovered ? -8 : 0, 
         borderColor: isHovered ? `${book.coverAccent}40` : "var(--border-color)", 
         boxShadow: isHovered 
-          ? `0 20px 40px -15px ${book.glowColor || "rgba(0,0,0,0.15)"}` 
+          ? `0 20px 40px -15px ${book.glowColor || "rgba(0,0,0,0.2)"}` 
           : "0 4px 20px rgba(0,0,0,0.02)" 
       }}
       exit={{ opacity: 0, scale: 0.95 }}
@@ -31,10 +46,8 @@ export default function BookCard({
         setIsHovered(true);
         if (onMouseEnter) onMouseEnter();
       }}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        if (onMouseLeave) onMouseLeave();
-      }}
+      onMouseMove={handleCardMouseMove}
+      onMouseLeave={handleCardMouseLeave}
       className="glass-card"
       transition={{ type: "spring", stiffness: 350, damping: 25 }}
       style={{
@@ -43,7 +56,7 @@ export default function BookCard({
         height: "100%",
         padding: "1.25rem",
         position: "relative",
-        overflow: "visible", // Allowed overflow to prevent 3D clipping
+        overflow: "visible", 
         perspective: "1000px"
       }}
     >
@@ -119,11 +132,11 @@ export default function BookCard({
         <motion.div
           onClick={onOpen}
           animate={{
-            rotateY: isHovered ? 26 : 10,
-            rotateX: isHovered ? 6 : 3,
+            rotateY: isHovered ? 26 + mouseOffset.x : 10,
+            rotateX: isHovered ? 6 - mouseOffset.y : 3,
             scale: isHovered ? 1.05 : 1,
             boxShadow: isHovered 
-              ? `0 20px 35px -8px ${book.glowColor || "rgba(0,0,0,0.35)"}` 
+              ? `0 22px 40px -8px ${book.glowColor || "rgba(0,0,0,0.38)"}` 
               : `0 10px 20px -5px rgba(0,0,0,0.18)`
           }}
           transition={{ type: "spring", stiffness: 180, damping: 18 }}
@@ -135,30 +148,71 @@ export default function BookCard({
             borderRadius: "4px 8px 8px 4px"
           }}
         >
+          {/* Bookmark Ribbon */}
+          <motion.div
+            animate={{
+              y: isHovered ? 8 : 0,
+              rotateZ: isHovered ? 3 : 0
+            }}
+            transition={{ type: "spring", stiffness: 120, damping: 12 }}
+            style={{
+              position: "absolute",
+              top: "-5px",
+              right: "22px",
+              width: "8px",
+              height: "40px",
+              backgroundColor: book.coverAccent,
+              zIndex: 3,
+              boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
+              transform: "translateZ(5px) rotateX(15deg)",
+              transformOrigin: "center top",
+              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 50% 82%, 0% 100%)"
+            }}
+          />
+
           {/* Front Cover Layer */}
           <div
             style={{
               position: "absolute",
               inset: 0,
               background: book.image 
-                ? `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.2) 100%), url(${book.image}) center/cover no-repeat` 
+                ? `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.28) 100%), url(${book.image}) center/cover no-repeat` 
                 : book.themeColor,
               borderRadius: "4px 8px 8px 4px",
               border: "1px solid rgba(255, 255, 255, 0.08)",
-              transform: "translateZ(8px)",
-              zIndex: 5
+              transform: "translateZ(10px)",
+              zIndex: 5,
+              overflow: "hidden"
             }}
           >
-            {/* Spine Shadow on Front Cover */}
+            {/* Shimmer reflection sweep overlay */}
+            <motion.div
+              initial={{ x: "-100%", y: "-100%" }}
+              animate={{ 
+                x: isHovered ? "100%" : "-100%",
+                y: isHovered ? "100%" : "-100%"
+              }}
+              transition={{ duration: 0.9, ease: "easeInOut" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(135deg, transparent, rgba(255,255,255,0.0) 30%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.0) 70%, transparent)",
+                zIndex: 6,
+                pointerEvents: "none"
+              }}
+            />
+
+            {/* Spine Gold Foil simulation band on Front Cover */}
             <div
               style={{
                 position: "absolute",
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: "10px",
-                background: "linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.15) 100%)",
-                zIndex: 6
+                width: "9px",
+                background: "linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(212, 175, 55, 0.3) 30%, rgba(0,0,0,0.15) 60%, rgba(212, 175, 55, 0.2) 100%)",
+                borderRight: "1px solid rgba(212, 175, 55, 0.35)",
+                zIndex: 7
               }}
             />
             
@@ -181,11 +235,11 @@ export default function BookCard({
               top: "2px",
               bottom: "2px",
               right: "0",
-              width: "16px",
+              width: "20px",
               backgroundColor: "var(--bg-secondary)",
               border: "1px solid var(--border-color)",
               backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
-              transform: "rotateY(90deg) translateZ(8px)",
+              transform: "rotateY(90deg) translateZ(10px)",
               transformOrigin: "right center",
               borderRadius: "0 3px 3px 0",
               zIndex: 4
@@ -199,11 +253,11 @@ export default function BookCard({
               left: "2px",
               right: "2px",
               bottom: "0",
-              height: "16px",
+              height: "20px",
               backgroundColor: "var(--bg-secondary)",
               border: "1px solid var(--border-color)",
               backgroundImage: "repeating-linear-gradient(to right, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
-              transform: "rotateX(90deg) translateZ(8px)",
+              transform: "rotateX(90deg) translateZ(10px)",
               transformOrigin: "center bottom",
               borderRadius: "0 0 3px 3px",
               zIndex: 4
@@ -219,13 +273,13 @@ export default function BookCard({
               inset: 0,
               backgroundColor: "rgba(0,0,0,0.6)",
               backdropFilter: "blur(3px)",
-              zIndex: 7, // above front cover layer
+              zIndex: 7, 
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "4px 8px 8px 4px",
-              transform: "translateZ(9px)",
-              pointerEvents: isHovered ? "auto" : "none" // Prevent blocking clicks when hidden
+              transform: "translateZ(11px)",
+              pointerEvents: isHovered ? "auto" : "none" 
             }}
           >
             <span
