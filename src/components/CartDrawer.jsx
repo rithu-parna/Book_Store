@@ -19,16 +19,24 @@ export default function CartDrawer({
   const [checkoutStep, setCheckoutStep] = useState(0); // 0: Review, 1: Submitting, 2: Done
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const discountAmount = subtotal * activeDiscount;
-  const total = subtotal - discountAmount;
+  const isFlatDiscount = activeDiscount >= 1.0;
+  const discountAmount = isFlatDiscount ? activeDiscount : subtotal * activeDiscount;
+  const total = Math.max(0, subtotal - discountAmount);
 
   const handleApplyCoupon = () => {
     setCouponError("");
     setCouponSuccess(false);
 
     const formattedCode = couponCode.trim().toUpperCase();
-    if (couponCodes[formattedCode] !== undefined) {
-      setActiveDiscount(couponCodes[formattedCode]);
+    const allCoupons = {
+      ...couponCodes,
+      "SCHOLAR20": 0.20,
+      "BIBLIOPHILE25": 0.25,
+      "SAGE35": 0.35
+    };
+
+    if (allCoupons[formattedCode] !== undefined) {
+      setActiveDiscount(allCoupons[formattedCode]);
       setCouponSuccess(true);
     } else {
       setCouponError("Invalid literary coupon");
@@ -338,7 +346,7 @@ export default function CartDrawer({
                 {couponError && <p style={{ color: "#ef4444", fontSize: "0.75rem", marginBottom: "1rem", fontWeight: "bold" }}>{couponError}</p>}
                 {couponSuccess && (
                   <p style={{ color: "#10b981", fontSize: "0.75rem", marginBottom: "1rem", fontWeight: "bold", display: "flex", alignItems: "center", gap: "2px" }}>
-                    <Check size={12} /> Coupon Applied ({activeDiscount * 100}% discount)
+                    <Check size={12} /> Coupon Applied ({isFlatDiscount ? `$${activeDiscount.toFixed(2)} off` : `${(activeDiscount * 100).toFixed(0)}% off`})
                   </p>
                 )}
 
