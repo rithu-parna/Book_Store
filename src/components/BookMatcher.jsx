@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Sparkles, BrainCircuit, RefreshCw, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function BookMatcher({ books, onOpenBook, onAddToCart, user, onOpenAuth }) {
+export default function BookMatcher({ books, onOpenBook, onAddToCart, user, onOpenAuth, onQuizComplete }) {
   const [step, setStep] = useState(0); // 0: Start, 1: Q1, 2: Q2, 3: Q3, 4: Computing, 5: Result
   const [answers, setAnswers] = useState({
     setting: "",
@@ -120,6 +120,9 @@ export default function BookMatcher({ books, onOpenBook, onAddToCart, user, onOp
     const recommendation = score[Math.floor(Math.random() * score.length)] || books[0];
     setMatchedBook(recommendation);
     setStep(5);
+    if (onQuizComplete) {
+      onQuizComplete();
+    }
   };
 
   return (
